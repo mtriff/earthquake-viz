@@ -1,0 +1,65 @@
+@{
+    ViewData["Title"] = "Magnitude";
+}
+<h2>@ViewData["Title"].</h2>
+<h3>@ViewData["Message"]</h3>
+
+<div id="parameters" class="col-md-4">
+    <div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Parameters</h3>
+    </div>
+    <div class="panel-body">
+        <p>Date Range</p>
+
+
+        <div class="dropdown col-sm-6">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Days Start
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">...</a></li>
+            <li><a href="#">29</a></li>
+            <li><a href="#">30</a></li>
+        </ul>
+        </div>
+
+        <div class="dropdown col-sm-6">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Days End
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">...</a></li>
+            <li><a href="#">29</a></li>
+            <li><a href="#">30</a></li>
+        </ul>
+        </div>
+
+        <br>
+        <hr>
+
+        <p>Aggregate By</p>
+
+        <div class="btn-group-vertical col-md-12" role="group" aria-label="aggregate">
+            <button type="button" class="btn btn-default">By Hour</button>
+            <button type="button" class="btn btn-default">By Day</button>
+            <button type="button" class="btn btn-default">By Week</button>
+        </div>
+
+    </div>
+    </div>
+</div>
+
+<div class="col-md-8">
+    <svg class="chart"></svg>
+</div>
+
+<hr>

@@ -31,5 +31,10 @@ namespace EarthquakeViz.Controllers
         {
             return View();
         }
+
+        public IActionResult Magnitude()
+        {
+            return View();
+        }
     }
 }
