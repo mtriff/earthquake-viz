@@ -58,38 +58,74 @@ div.tooltip {
   border-radius: 2px;
 }
 
-.mag0 {
+.tsunami0 {
     fill: #0D47A1
 }
 
-.mag1 {
+.tsunami1 {
     fill: #1565C0
 }
 
-.mag2 {
+.tsunami2 {
     fill: #1976D2
 }
 
-.mag3 {
+.tsunami3 {
     fill: #1E88E5
 }
 
-.mag4 {
+.tsunami4 {
     fill: #2196F3
 }
 
-.mag5 {
+.tsunami5 {
     fill: #42A5F5
 }
 
-.mag6 {
+.tsunami6 {
     fill: #64B5F6
 }
 
-.mag7 {
+.tsunami7 {
     fill: #90CAF9
 }
 
-.mag8plus {
+.tsunami8plus {
     fill: #BBDEFB
+}
+
+.mag0 {
+    fill: #33691E
+}
+
+.mag1 {
+    fill: #558B2F
+}
+
+.mag2 {
+    fill: #689F38
+}
+
+.mag3 {
+    fill: #7CB342
+}
+
+.mag4 {
+    fill: #8BC34A
+}
+
+.mag5 {
+    fill: #9CCC65
+}
+
+.mag6 {
+    fill: #AED581
+}
+
+.mag7 {
+    fill: #C5E1A5
+}
+
+.mag8plus {
+    fill: #DCEDC8
 }
