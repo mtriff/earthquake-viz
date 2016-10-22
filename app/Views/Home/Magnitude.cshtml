@@ -6,7 +6,7 @@
 
 <script>var rawData = @Html.Raw(@ViewData["QuakeData"])</script>
 
-<div id="parameters" class="col-md-4">
+<div id="parameters" class="col-md-12">
     <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">Parameters</h3>
@@ -51,16 +51,15 @@
         <p>Aggregate By</p>
 
         <div class="btn-group-vertical col-md-12" role="group" aria-label="aggregate">
-            <button type="button" class="btn btn-default">By Hour</button>
-            <button type="button" class="btn btn-default">By Day</button>
-            <button type="button" class="btn btn-default">By Week</button>
+            <button type="button" onclick="aggregateBy(this, 'QuakeHour')" class="aggregateBy btn btn-default">By Hour</button>
+            <button type="button" onclick="aggregateBy(this, 'QuakeDate')" class="aggregateBy btn btn-default active">By Day</button>
         </div>
 
     </div>
     </div>
 </div>
 
-<div class="col-md-8">
+<div class="col-md-12">
     <svg class="chart"></svg>
 </div>
 

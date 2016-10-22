@@ -58,34 +58,38 @@ div.tooltip {
   border-radius: 2px;
 }
 
-.mag1 {
+.mag0 {
     fill: #0D47A1
 }
 
-.mag2 {
+.mag1 {
     fill: #1565C0
 }
 
-.mag3 {
+.mag2 {
     fill: #1976D2
 }
 
-.mag4 {
+.mag3 {
     fill: #1E88E5
 }
 
-.mag5 {
+.mag4 {
     fill: #2196F3
 }
 
-.mag6 {
+.mag5 {
     fill: #42A5F5
 }
 
-.mag7 {
+.mag6 {
     fill: #64B5F6
 }
 
-.mag8plus {
+.mag7 {
     fill: #90CAF9
+}
+
+.mag8plus {
+    fill: #BBDEFB
 }

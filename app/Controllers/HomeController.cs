@@ -39,9 +39,7 @@ namespace EarthquakeViz.Controllers
 
         public IActionResult Magnitude()
         {
-            // MagnitudeOverTime mot = 
             ViewData["QuakeData"] = qe.executeMagnitudeOverTypeQuery();
-            // Console.WriteLine(qe.executeMagnitudeOverTypeQuery());
             return View();
         }
     }

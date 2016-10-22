@@ -10,7 +10,6 @@ using EarthquakeViz.Models;
 
 namespace EarthquakeViz.Services
 {
-
     public class RestUtility
     {
         public static string DRILL_URL = "http://159.203.1.85:8047/query.json";
