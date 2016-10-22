@@ -1,4 +1,3 @@
-// Write your Javascript code.
 function loadChart() {
         var rawData = [{
         "theTime": "2016-09-20",
@@ -38,7 +37,6 @@ function loadChart() {
         dates[key] = _.countBy(value, "Magnitude");   
     });
 
-    console.log(dates);
     // Format
     // data = [{ "2016-09-20": { 1: 2, 2:1 } }];
     data = _.map(dates, function(value, prop) {
@@ -46,8 +44,8 @@ function loadChart() {
         newVal[prop] = value;
         return newVal;
     });
-
-
+    
+    console.log(data);
 
     renderChart(data);
 }
