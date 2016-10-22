@@ -3,11 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using EarthquakeViz.Services;
 
 namespace EarthquakeViz.Controllers
 {
     public class HomeController : Controller
     {
+        QueryExecutor qe;
+        public HomeController() {
+            this.qe = new QueryExecutor();
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -23,7 +29,6 @@ namespace EarthquakeViz.Controllers
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
-
             return View();
         }
 
@@ -34,6 +39,9 @@ namespace EarthquakeViz.Controllers
 
         public IActionResult Magnitude()
         {
+            // MagnitudeOverTime mot = 
+            ViewData["QuakeData"] = qe.executeMagnitudeOverTypeQuery();
+            // Console.WriteLine(qe.executeMagnitudeOverTypeQuery());
             return View();
         }
     }
