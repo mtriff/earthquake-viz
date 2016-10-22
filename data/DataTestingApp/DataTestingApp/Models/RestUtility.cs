@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Net;
 using System.IO;
-using System.Runtime.Serialization.Json;
+using Newtonsoft.Json;
 
 namespace DataTestingApp.Models
 {
@@ -58,8 +55,7 @@ namespace DataTestingApp.Models
             DrillPostQuery dpq = new DrillPostQuery();
             dpq.queryType = RestUtility.QUERY_TYPE;
             dpq.query = query;
-            var javaScriptSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-            string jsonString = javaScriptSerializer.Serialize(dpq);
+            string jsonString = JsonConvert.SerializeObject(dpq);
             return jsonString;
         }
     }

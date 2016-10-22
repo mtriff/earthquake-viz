@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Net;
-using System.IO;
-using System.Runtime.Serialization.Json;
 using DataTestingApp.Models;
 
 namespace DataTestingApp
@@ -11,8 +8,13 @@ namespace DataTestingApp
         protected void Application_Start(object sender, EventArgs e)
         {
             QueryExecutor qe = new QueryExecutor();
+
             MagnitudeOverTime mot = qe.executeMagnitudeOverTypeQuery();
             System.Diagnostics.Debug.WriteLine(mot.magnitudeTimeSet.Length + " result(s) found.");
+
+            TsunamiOverTime tot = qe.executeTsunamiOverTypeQuery();
+            System.Diagnostics.Debug.WriteLine(tot.tsunamiTimeSet.Length + " result(s) found.");
+
         }
     }
 }
