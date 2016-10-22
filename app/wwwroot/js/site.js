@@ -19,7 +19,7 @@ function loadChart(aggregateBy) {
         newVal[prop] = value;
         return newVal;
     }); 
-    console.log(data);
+    // console.log(data);
     renderChart(data, aggregateBy);
 }
 
@@ -242,7 +242,6 @@ function renderChart(data, aggregateBy) {
         if (currDate > maxDate) maxDate = currDate;
         if (currDate < minDate) minDate = currDate;
     });
-    console.log(allDates);
 
     // Add one lower date so that the tick labels do not begin at the origin
     var minMinusOne = new Date(minDate);
@@ -334,6 +333,8 @@ function hideTooltip(d) {
 function clearChart() {
     d3.select('.chart')
         .selectAll('g')
+        .remove()
+    d3.selectAll('.tooltip')
         .remove();
 }
 
