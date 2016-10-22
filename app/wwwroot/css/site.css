@@ -37,9 +37,9 @@ textarea {
   }
 }
 
-.chart rect {
+/*.chart rect {
   fill: steelblue;
-}
+}*/
 
 .chart text {
   font: 10px sans-serif;
@@ -49,11 +49,43 @@ textarea {
 div.tooltip {
   position: absolute;
   text-align: center;
-  width: 60px;
-  height: 28px;
+  width: 30px;
+  height: 20px;
   padding: 2px;
   font: 12px sans-serif;
-  background: lightsteelblue;
+  background: #E3F2FD;
   border: 0px;
-  border-radius: 8px;
+  border-radius: 2px;
+}
+
+.mag1 {
+    fill: #0D47A1
+}
+
+.mag2 {
+    fill: #1565C0
+}
+
+.mag3 {
+    fill: #1976D2
+}
+
+.mag4 {
+    fill: #1E88E5
+}
+
+.mag5 {
+    fill: #2196F3
+}
+
+.mag6 {
+    fill: #42A5F5
+}
+
+.mag7 {
+    fill: #64B5F6
+}
+
+.mag8plus {
+    fill: #90CAF9
 }
