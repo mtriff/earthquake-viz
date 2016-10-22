@@ -1,4 +1,6 @@
 ﻿using System.Runtime.Serialization.Json;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace DataTestingApp.Models
 {
@@ -31,8 +33,8 @@ namespace DataTestingApp.Models
             string jsonString = rs.getJsonString(query);
             rs.GetPOSTResponse(jsonString, (x) =>
             {
-                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(MagnitudeOverTime));
-                ms = (ser.ReadObject(x.GetResponseStream()) as MagnitudeOverTime);
+                StreamReader sr = new StreamReader(x.GetResponseStream());
+                ms = JsonConvert.DeserializeObject<MagnitudeOverTime>(sr.ReadToEnd());
             });
             return ms;
         }
@@ -57,8 +59,8 @@ namespace DataTestingApp.Models
             string jsonString = rs.getJsonString(query);
             rs.GetPOSTResponse(jsonString, (x) =>
             {
-                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(TsunamiOverTime));
-                ms = (ser.ReadObject(x.GetResponseStream()) as TsunamiOverTime);
+                StreamReader sr = new StreamReader(x.GetResponseStream());
+                ms = JsonConvert.DeserializeObject<TsunamiOverTime>(sr.ReadToEnd());
             });
             return ms;
         }
@@ -81,8 +83,8 @@ namespace DataTestingApp.Models
             string jsonString = rs.getJsonString(query);
             rs.GetPOSTResponse(jsonString, (x) =>
             {
-                DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(MagnitudeByLatLongOverTime));
-                ms = (ser.ReadObject(x.GetResponseStream()) as MagnitudeByLatLongOverTime);
+                StreamReader sr = new StreamReader(x.GetResponseStream());
+                ms = JsonConvert.DeserializeObject<MagnitudeByLatLongOverTime>(sr.ReadToEnd());
             });
             return ms;
         }

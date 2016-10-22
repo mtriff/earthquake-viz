@@ -23,7 +23,7 @@ namespace DataTestingApp
         public string quakeHour { get; set; }
 
         [DataMember(Name = "Magnitude", EmitDefaultValue = false)]
-        public int magnitude { get; set; }
+        public float magnitude { get; set; }
 
         [DataMember(Name = "Amount", EmitDefaultValue = false)]
         public int amount { get; set; }
@@ -49,7 +49,7 @@ namespace DataTestingApp
         public string quakeHour { get; set; }
 
         [DataMember(Name = "Tsunami", EmitDefaultValue = false)]
-        public int tsunami { get; set; }
+        public float tsunami { get; set; }
 
         [DataMember(Name = "Amount", EmitDefaultValue = false)]
         public int amount { get; set; }
