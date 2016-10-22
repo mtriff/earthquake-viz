@@ -18,6 +18,9 @@ namespace DataTestingApp
             MagnitudeByLatLongOverTime molt = qe.executeMagnitudeByLatLongOverTimeQuery();
             System.Diagnostics.Debug.WriteLine(molt.magnitudeLatLongTimeSet.Length + " result(s) found.");
 
+            MagnitudeByLatLongOverTime tmolt = qe.executeTsunamiOnlyMagnitudeByLatLongOverTimeQuery();
+            System.Diagnostics.Debug.WriteLine(tmolt.magnitudeLatLongTimeSet.Length + " result(s) found.");
+
         }
     }
 }
