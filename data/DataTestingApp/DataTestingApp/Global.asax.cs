@@ -9,11 +9,17 @@ namespace DataTestingApp
         {
             QueryExecutor qe = new QueryExecutor();
 
-            MagnitudeOverTime mot = qe.executeMagnitudeOverTypeQuery();
+            MagnitudeOverTime mot = qe.executeMagnitudeOverTimeQuery();
             System.Diagnostics.Debug.WriteLine(mot.magnitudeTimeSet.Length + " result(s) found.");
 
-            TsunamiOverTime tot = qe.executeTsunamiOverTypeQuery();
+            TsunamiOverTime tot = qe.executeTsunamiOverTimeQuery();
             System.Diagnostics.Debug.WriteLine(tot.tsunamiTimeSet.Length + " result(s) found.");
+
+            MagnitudeByLatLongOverTime molt = qe.executeMagnitudeByLatLongOverTimeQuery();
+            System.Diagnostics.Debug.WriteLine(molt.magnitudeLatLongTimeSet.Length + " result(s) found.");
+
+            MagnitudeByLatLongOverTime tmolt = qe.executeTsunamiOnlyMagnitudeByLatLongOverTimeQuery();
+            System.Diagnostics.Debug.WriteLine(tmolt.magnitudeLatLongTimeSet.Length + " result(s) found.");
 
         }
     }
