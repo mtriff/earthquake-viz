@@ -1,40 +1,3 @@
-
-
-// zoom and pan
-// var zoom = d3.zoom()
-//     .on("zoom",function() {
-//         g.attr("transform","translate("+ 
-//             d3.event.translate.join(",")+")scale("+d3.event.scale+")");
-//         g.selectAll("path")  
-//             .attr("d", path.projection(projection)); 
-//   });
-
-// var zoom = d3.zoom()
-//     .scaleExtent([1, 40])
-//     .translateExtent([[-100, -100], [width + 90, height + 100]])
-//     .on("zoom", zoomed);
-
-// function zoomed() {
-//   view.attr("transform", d3.event.transform);
-//   gX.call(xAxis.scale(d3.event.transform.rescaleX(x)));
-//   gY.call(yAxis.scale(d3.event.transform.rescaleY(y)));
-// }
-
-// svg.call(d3.zoom().on("zoom", function () {
-//         svg.attr("transform", d3.event.transform)
-// }));
-
-
-
-
-// d3.select(".chart")
-//     .append('circle')
-//     .attr("class", "mag7")
-//     .attr("r", 4)
-//     .attr("transform", function() {return "translate(" + projection([117.6071,255.636]) + ")";});;
-// document.getElementsByTagName("body")[0].onload = loadChart("QuakeDate");
-
-
 // Globals
 var yScale;
 var xScale;
@@ -118,12 +81,6 @@ function renderChart(data, aggregateBy) {
 
     var graticule = d3.geoGraticule();
 
-    // var zoom = d3.zoom()
-    //     .translate([width / 2, height / 2])
-    //     .scale(scale0)
-    //     .scaleExtent([scale0, 8 * scale0])
-    //     .on("zoom", zoomed); 
-
     var svg = d3.select(".chart")
         .attr("width", width)
         .attr("height", height);
@@ -131,10 +88,7 @@ function renderChart(data, aggregateBy) {
     function zoomed() {
         var transform = d3.event.transform;
         d3.selectAll('circle')
-            .attr("transform", d3.event.transform);  //"translate(" + .join(',') + ")"); //function(d) { 
-                // var proj = projection(transform.applyX(d["Longitude"]), transform.applyY(d["Latitude"]))
-                // var proj = transform(projection(d["Longitude"], d["Latitude"]));
-                // return "translate(" + transform.apply(projection(d["Longitude"], d["Latitude"])) + ")"; });
+            .attr("transform", d3.event.transform);
         d3.selectAll('path')
             .attr("transform", d3.event.transform);    
     }
