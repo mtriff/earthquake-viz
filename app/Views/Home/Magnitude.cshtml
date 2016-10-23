@@ -12,41 +12,6 @@
         <h3 class="panel-title">Parameters</h3>
     </div>
     <div class="panel-body">
-        <p>Date Range</p>
-
-
-        <div class="dropdown col-sm-6">
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Days Start
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">...</a></li>
-            <li><a href="#">29</a></li>
-            <li><a href="#">30</a></li>
-        </ul>
-        </div>
-
-        <div class="dropdown col-sm-6">
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Days End
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">...</a></li>
-            <li><a href="#">29</a></li>
-            <li><a href="#">30</a></li>
-        </ul>
-        </div>
-
-        <br>
-        <hr>
 
         <p>Aggregate By</p>
 
@@ -55,6 +20,28 @@
             <button type="button" onclick="aggregateBy(this, 'QuakeDate')" class="aggregateBy btn btn-default active">By Day</button>
         </div>
 
+        <br>
+        <hr>
+
+        <p>Time Range</p>
+
+        <div class="dropdown col-xs-6">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Range Start
+            <span class="caret"></span>
+        </button>
+        <ul id="rangestart" class="dropdown-menu timemenu start" aria-labelledby="dropdownMenu1">
+        </ul>
+        </div>
+
+        <div class="dropdown col-xs-6">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            Range End
+            <span class="caret"></span>
+        </button>
+        <ul id="rangeend" class="dropdown-menu timemenu" aria-labelledby="dropdownMenu2">
+        </ul>
+        </div>
     </div>
     </div>
 </div>

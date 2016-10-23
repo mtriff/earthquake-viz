@@ -6,29 +6,78 @@ var barWidth;
 var barOffset;
 var div;
 var height;
+var currAggregateBy;
+var data
 
-function loadChart(aggregateBy) {
+function loadChart(aggregateBy, preserveMenuLabel) {
     // Convert dates to format for rendering chart
     // data = [{ "2016-09-20": { 1.0: 2, 2.0:1 } }];
+    if (currAggregateBy == aggregateBy) {
+        var rangeStartText = document.getElementById('dropdownMenu1').innerHTML;
+        var rangeEndText = document.getElementById('dropdownMenu2').innerHTML;
+        var rangeStart, rangeEnd;
+        if (rangeStartText.indexOf("Range") == -1) { 
+            // a time has been selected
+            if (aggregateBy.indexOf("Hour") == -1) {
+                // Aggregate by days
+                rangeStart = getDateFromOption(rangeStartText.substring(0, 10));
+            } else {
+                // Hour
+                rangeStart = new Date(0,0,0, parseInt(rangeStartText.substring(0, 5)));
+            }
+        }
+        if (rangeEndText.indexOf("Range") == -1) { 
+            // a time has been selected
+            if (aggregateBy.indexOf("Hour") == -1) {
+                // Aggregate by days
+                rangeEnd = getDateFromOption(rangeEndText.substring(0, 10));
+            } else {
+                // Hour
+                rangeEnd = new Date(0,0,0, parseInt(rangeEndText.substring(0, 5)));
+            }
+        }
+    }
+    
     var dates = _.groupBy(rawData.rows, aggregateBy);
+    var datesForOptions = [];
+    var newDates = {};
     _.forEach(dates, function(value, key) {
-        dates[key] = _.countBy(value, "Magnitude");   
+        var keyTime;
+        if (aggregateBy.indexOf("Date") != -1) {
+            keyTime = new Date(key);
+        } else {
+            keyTime = new Date(0, 0, 0, key);
+        }
+        datesForOptions.push(keyTime);
+        if (rangeStart) {
+            if (keyTime < rangeStart) return;
+        }
+        if (rangeEnd) {
+            if (keyTime > rangeEnd) return;
+        }
+        newDates[key] = _.countBy(value, "Magnitude");   
     });
-    data = _.map(dates, function(value, prop) {
+
+    if (!document.getElementById("rangestart").getElementsByTagName("li").length
+            || currAggregateBy != aggregateBy) {
+        setTimeRangeOptions(datesForOptions);
+    }
+
+    data = _.map(newDates, function(value, prop) {
         var newVal = {};
         newVal[prop] = value;
         return newVal;
     }); 
-    // console.log(data);
-    renderChart(data, aggregateBy);
+    renderChart(data, aggregateBy, preserveMenuLabel);
 }
 
-function renderChart(data, aggregateBy) {
+function renderChart(data, aggregateBy, preserveMenuLabel) {
+    currAggregateBy = aggregateBy;
     // Set graph dimensions
     margin = { top: 20, right: 20, bottom: 50, left: 40 };
-    height = 400
-    var width = 1000;
-    barWidth = 20,
+    height = 400;
+    var width = 100 + (data.length * 30); // Max Width (for 30 days) is 1000
+    barWidth = 20;
     barOffset = 10;
 
     // Set scales
@@ -225,7 +274,7 @@ function renderChart(data, aggregateBy) {
 
     // Add X-axis line
     var timeFormat = "%Y-%m-%d";
-    if (aggregateBy == "QuakeHour") timeFormat = "%I %p";
+    if (aggregateBy == "QuakeHour") timeFormat = "%H:00";
 
     var minDate = new Date(9999,11,31);
     var maxDate = new Date(1900,0,1);
@@ -333,7 +382,7 @@ function hideTooltip(d) {
 function clearChart() {
     d3.select('.chart')
         .selectAll('g')
-        .remove()
+        .remove();
     d3.selectAll('.tooltip')
         .remove();
 }
@@ -346,6 +395,113 @@ function aggregateBy(caller, parameter) {
     caller.className = caller.className + " active";
     clearChart();
     loadChart(parameter);
+}
+
+function setTimeRangeOptions(allOptions, menu, preserveMenuLabel) {
+    var menus;
+    if (menu) {
+        menus = [menu];
+    } else {
+        menus = document.getElementsByClassName("timemenu");
+    }
+    _.forEach(menus, function(menu) {
+        // Set default button label
+        if (!preserveMenuLabel) {
+            var menuBtn = menu.parentElement.getElementsByClassName("btn")[0];        
+            menuBtn.innerHTML = "Range " + _.capitalize(menu.id.substring(5)) + "<span class='caret'></span>";
+        }
+        // Set options
+        menu.innerHTML = "";
+        allOptions.sort(function(a,b) { 
+            return new Date(a).getTime() - new Date(b).getTime() 
+        });
+        _.forEach(allOptions, function(option) {
+            var li = document.createElement("li");
+            var a = document.createElement("a");
+            a.className = "timeOption";
+            a.setAttribute("href", "#");
+            var optionText;
+            if (option.getYear() > 1) {
+                // Using days
+                optionText = option.toISOString().substring(0, 10);
+            } else {
+                optionText = formatAMPM(option);
+            }
+            a.appendChild(document.createTextNode(optionText));
+            li.appendChild(a);
+            menu.appendChild(li);
+        });
+    });
+    setOptionsChangeText(allOptions);
+}
+
+function formatAMPM(date) {
+  var hours = date.getHours();
+  if (hours < 10) hours = "0" + hours;
+  var strTime = hours + ':00';
+  return strTime;
+}
+
+function setOptionsChangeText(allOptions) {
+    var options = document.getElementsByClassName("timeOption");
+    _.forEach(options, function(option) {
+        option.onclick =  function(e) {
+            // Change options for the other menu
+            var timeSelected = getDateFromOption(e.target.innerHTML); // Split to handle both hours and dates
+            var otherList;
+            if (e.target.parentElement.parentElement.id == "rangestart") {
+                otherList = document.getElementById("rangeend");
+            } else if (e.target.parentElement.parentElement.id == "rangeend") {
+                otherList = document.getElementById("rangestart");
+            } else {
+                return;
+            }
+            setTimeRangeOptions(allOptions, otherList, true);
+            var otherOptions = otherList.getElementsByTagName("li");
+            var toRemove = [];
+            _.forEach(otherOptions, function(otherOption) {
+                var otherOptionText = otherOption.getElementsByTagName("a")[0].innerHTML;
+                var otherTime = getDateFromOption(otherOptionText);
+                if (otherList.id == "rangeend" && otherTime.getTime() < timeSelected.getTime()) {
+                    toRemove.push(otherOption);
+                } else if (otherList.id == "rangestart" && otherTime.getTime() > timeSelected.getTime()) {
+                    toRemove.push(otherOption);  
+                }
+            });
+            _.forEach(toRemove, function(otherOption) {
+                otherList.removeChild(otherOption);
+            });
+            // Make the selection visibly persist
+            var menuBtn = e.target.parentElement.parentElement.parentElement.getElementsByClassName("btn")[0];
+            menuBtn.innerHTML = e.target.innerHTML + "<span class='caret'></span>";
+            // Re-render chart
+            clearChart();
+            loadChart(currAggregateBy, true);
+        }
+    });
+}
+
+function getDateFromOption(timeStr) {
+    var time;
+    if (timeStr.indexOf(":") != -1) { // Hour
+        time = new Date("2000-01-" + (parseInt(timeStr.split(":")[0]) + 1));
+    } else {
+        time = new Date(timeStr);
+    }
+    return time;
+}
+
+function removeOutOfRange() {
+    var chart = d3.select('.chart'); 
+    chart
+        .data(data)
+        .selectAll('.mag0rects')
+        .selectAll('rect')
+        .data(function(d, i) {
+            if (i == 0) return d;
+        })
+        .transition()
+        .remove();
 }
 
 window.onload = loadChart("QuakeDate");
