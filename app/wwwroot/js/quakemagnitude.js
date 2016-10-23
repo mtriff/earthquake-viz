@@ -504,4 +504,4 @@ function removeOutOfRange() {
         .remove();
 }
 
-window.onload = loadChart("QuakeDate");
+document.getElementsByTagName("body")[0].onload = loadChart("QuakeDate");

@@ -42,5 +42,11 @@ namespace EarthquakeViz.Controllers
             ViewData["QuakeData"] = qe.executeMagnitudeOverTypeQuery();
             return View();
         }
+
+        public IActionResult QuakeLocation()
+        {
+            ViewData["QuakeData"] = qe.executeMagnitudeByLatLongOverTimeQuery(false);
+            return View();
+        }
     }
 }

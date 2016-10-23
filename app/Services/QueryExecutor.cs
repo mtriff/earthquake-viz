@@ -14,13 +14,13 @@ namespace EarthquakeViz.Services
 
         public QueryExecutor()
         {
-            this.rs = new Models.RestUtility();
+            this.rs = new RestUtility();
         }
 
         // Class name kept to preserve compatibility. Note that "Type" is a typo for "Time"
         public string executeMagnitudeOverTypeQuery()
         {
-            return executeMagnitudeOverTimeQuery(EPOCH_TIME, 0,
+            return executeMagnitudeOverTypeQuery(EPOCH_TIME, 0,
                 string.Format("{0:yyyy-MM-dd}", DateTime.Now), 23);
         }
 
