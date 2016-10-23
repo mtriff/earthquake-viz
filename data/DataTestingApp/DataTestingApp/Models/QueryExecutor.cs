@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.IO;
-using System;
+﻿using System;
 
 namespace DataTestingApp.Models
 {
@@ -14,17 +12,15 @@ namespace DataTestingApp.Models
             this.rs = new Models.RestUtility();
         }
 
-        public MagnitudeOverTime executeMagnitudeOverTimeQuery()
+        public string executeMagnitudeOverTimeQuery()
         {            
             return executeMagnitudeOverTimeQuery(EPOCH_TIME, 0, 
                 string.Format("{0:yyyy-MM-dd}", DateTime.Now), 23);
         }
 
-        public MagnitudeOverTime executeMagnitudeOverTimeQuery(string fromDate, int fromHour, 
+        public string executeMagnitudeOverTimeQuery(string fromDate, int fromHour, 
             string toDate, int toHour)
         {
-            MagnitudeOverTime ms =null;
-
             string query = @"SELECT TO_CHAR(TO_DATE(CAST(q.f.properties.`time` AS BIGINT)), 'yyyy-MM-dd') as QuakeDate, 
                 TO_CHAR(TO_DATE(CAST(q.f.properties.`time` AS BIGINT)), 'HH') as QuakeHour, 
                 ROUND(q.f.properties.mag,0) as Magnitude, COUNT(ROUND(q.f.properties.mag,0)) as Amount
@@ -42,25 +38,18 @@ namespace DataTestingApp.Models
                 ROUND(q.f.properties.mag, 0)ORDER BY QuakeDate ASC, QuakeHour ASC, Magnitude ASC";
 
             string jsonString = rs.getJsonString(query);
-            rs.GetPOSTResponse(jsonString, (x) =>
-            {
-                StreamReader sr = new StreamReader(x.GetResponseStream());
-                ms = JsonConvert.DeserializeObject<MagnitudeOverTime>(sr.ReadToEnd());
-            });
-            return ms;
+            return rs.GetPOSTResponse(jsonString).Result;
         }
 
-        public TsunamiOverTime executeTsunamiOverTimeQuery()
+        public string executeTsunamiOverTimeQuery()
         {
             return executeTsunamiOverTimeQuery(EPOCH_TIME, 0,
                 string.Format("{0:yyyy-MM-dd}", DateTime.Now), 23);
         }
 
-        public TsunamiOverTime executeTsunamiOverTimeQuery(string fromDate, int fromHour,
+        public string executeTsunamiOverTimeQuery(string fromDate, int fromHour,
             string toDate, int toHour)
         {
-            TsunamiOverTime ms = null;
-
             string query = @"SELECT TO_CHAR(TO_DATE(CAST(q.f.properties.`time` AS BIGINT)), 'yyyy-MM-dd') as QuakeDate, 
                     TO_CHAR(TO_DATE(CAST(q.f.properties.`time` AS BIGINT)), 'HH') as QuakeHour, 
                     q.f.properties.tsunami as Tsunami, COUNT(q.f.properties.tsunami) as Amount
@@ -79,25 +68,18 @@ namespace DataTestingApp.Models
                     q.f.properties.tsunami ORDER BY QuakeDate ASC, QuakeHour ASC, Tsunami ASC";
 
             string jsonString = rs.getJsonString(query);
-            rs.GetPOSTResponse(jsonString, (x) =>
-            {
-                StreamReader sr = new StreamReader(x.GetResponseStream());
-                ms = JsonConvert.DeserializeObject<TsunamiOverTime>(sr.ReadToEnd());
-            });
-            return ms;
+            return rs.GetPOSTResponse(jsonString).Result;
         }
 
-        public MagnitudeByLatLongOverTime executeMagnitudeByLatLongOverTimeQuery(bool onlyTsunamis)
+        public string executeMagnitudeByLatLongOverTimeQuery(bool onlyTsunamis)
         {
             return executeMagnitudeByLatLongOverTimeQuery(onlyTsunamis, EPOCH_TIME, 0,
                 string.Format("{0:yyyy-MM-dd}", DateTime.Now), 23);
         }
 
-        public MagnitudeByLatLongOverTime executeMagnitudeByLatLongOverTimeQuery(bool onlyTsunamis, 
+        public string executeMagnitudeByLatLongOverTimeQuery(bool onlyTsunamis, 
             string fromDate, int fromHour, string toDate, int toHour)
         {
-            MagnitudeByLatLongOverTime ms = null;
-
             string query = @"SELECT TO_CHAR(TO_DATE(CAST(q.f.properties.`time` AS BIGINT)), 'yyyy-MM-dd') as QuakeDate, 
                     TO_CHAR(TO_DATE(CAST(q.f.properties.`time` AS BIGINT)), 'HH') as QuakeHour, 
                     q.f.geometry.coordinates[1] as Latitude, q.f.geometry.coordinates[0] as Longitude,
@@ -121,12 +103,7 @@ namespace DataTestingApp.Models
             query += "ORDER BY QuakeDate ASC, QuakeHour ASC";
             
             string jsonString = rs.getJsonString(query);
-            rs.GetPOSTResponse(jsonString, (x) =>
-            {
-                StreamReader sr = new StreamReader(x.GetResponseStream());
-                ms = JsonConvert.DeserializeObject<MagnitudeByLatLongOverTime>(sr.ReadToEnd());
-            });
-            return ms;
+            return rs.GetPOSTResponse(jsonString).Result;
         }
     }
 }

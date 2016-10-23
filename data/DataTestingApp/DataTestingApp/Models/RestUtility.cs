@@ -1,6 +1,8 @@
 ﻿using System;
-using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.IO;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace DataTestingApp.Models
@@ -12,42 +14,20 @@ namespace DataTestingApp.Models
         public static string QUERY_TYPE = "SQL";
         private Uri drillRequest = new Uri(DRILL_URL);
 
-        public void GetPOSTResponse(string data, Action<HttpWebResponse> callback)
+        public async Task<string> GetPOSTResponse(string data)
         {
-            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(drillRequest);
-
-            request.Method = "POST";
-            request.ContentType = "application/json;charset=utf-8";
+            HttpClient client = new HttpClient();
+            client.BaseAddress = drillRequest;
 
             System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
             byte[] bytes = encoding.GetBytes(data);
+            ByteArrayContent byteContent = new ByteArrayContent(bytes);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            request.ContentLength = bytes.Length;
-
-            using (Stream requestStream = request.GetRequestStream())
-            {
-                // Send the data.
-                requestStream.Write(bytes, 0, bytes.Length);
-            }
-
-            try
-            {
-                request.BeginGetResponse((x) =>
-                {
-                    using (HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(x))
-                    {
-                        if (callback != null)
-                        {
-                            callback(response);
-                        }
-                    }
-                }, null);
-            }
-            catch (WebException ex)
-            {
-                var resp = new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
-                System.Diagnostics.Debug.WriteLine(resp);
-            }
+            HttpResponseMessage response = await client.PostAsync("", byteContent);
+            Stream stream = await response.Content.ReadAsStreamAsync();
+            StreamReader sr = new StreamReader(stream);
+            return sr.ReadToEnd();
         }
 
         public string getJsonString(string query)
