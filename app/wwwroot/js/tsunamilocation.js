@@ -170,7 +170,7 @@ function renderChart(data, aggregateBy) {
 }
 
 function getMapPointFillClass(d) {
-    return getMagnitudeFillClass(d);
+    return getTsunamiMagnitudeFillClass(d);
 }
 
 function showTooltip(d) {
@@ -194,3 +194,4 @@ function clearChart() {
 }
 
 document.getElementsByTagName("body")[0].onload = loadChart("QuakeDate");
+

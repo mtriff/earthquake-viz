@@ -11,6 +11,19 @@ function getMagnitudeFillClass(magnitude) {
     if (magnitudeInt >= 8) return "mag8plus";
 }
 
+function getTsunamiMagnitudeFillClass(magnitude) {
+    var magnitudeInt = parseInt(magnitude);
+    if (magnitudeInt < 1) return "tsunami0";
+    if (magnitudeInt < 2) return "tsunami1";
+    if (magnitudeInt < 3) return "tsunami2";
+    if (magnitudeInt < 4) return "tsunami3";
+    if (magnitudeInt < 5) return "tsunami4";
+    if (magnitudeInt < 6) return "tsunami5";
+    if (magnitudeInt < 7) return "tsunami6";
+    if (magnitudeInt < 8) return "tsunami7";
+    if (magnitudeInt >= 8) return "tsunami8plus";
+}
+
 function hideTooltip(d) {
     div.transition()
         .style("opacity", 0);
