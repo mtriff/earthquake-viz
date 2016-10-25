@@ -69,7 +69,7 @@ function renderChart(data, aggregateBy) {
     currAggregateBy = aggregateBy;
     // Set graph dimensions
     var width = 800;
-    height = 500;
+    height = 400;
 
     var projection = d3.geoEquirectangular()
         .scale(125)
@@ -119,6 +119,12 @@ function renderChart(data, aggregateBy) {
 
     d3.select(self.frameElement).style("height", height + "px");
 
+    // Create tooltip
+    div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .attr("id", "tooltip")
+        .style("opacity", 0);
+
     // Plot quake occurrences
     d3.select(".chart")
         .selectAll('circle')
@@ -126,62 +132,51 @@ function renderChart(data, aggregateBy) {
         .enter()
         .append('circle')
         .attr("class", function(d) { return getMagnitudeFillClass(d["Magnitude"]); })
-        .attr("r", 4)
+        .attr("r", 3)
         .attr("cx",  function(d) { return projection([d["Longitude"],d["Latitude"]])[0] })
         .attr("cy",  function(d) { return projection([d["Longitude"],d["Latitude"]])[1] })
-        .click();
+        .on("mouseover", function(d) { showTooltip(d); })
+        .on("mouseout", hideTooltip);
 
-    document.getElementsByClassName('chart')[0].click();
+    // Add legend
+    var legend = d3.selectAll(".legend")
+        .attr("height", 40)
+        .attr("width", 700);
+    legend
+        .selectAll('text')
+        .data(['Magnitude Legend:'])
+        .enter()
+        .append('text')
+        .attr('y', 25)
+        .text(function(d) { return d; })
+    legend
+        .selectAll('rect')
+        .data(["0.0", "1.0", "2.0", "3.0", "4.0", "5.0", "6.0", "7.0", "8.0"])
+        .enter()
+        .append('rect')
+        .attr('class', function(d) { return getMagnitudeFillClass(d) })
+        .attr('x', function(d, i) { return 150 + (i * 60)} )
+        .attr('width', '55')
+        .attr('height', '20');
+    legend
+        .selectAll('text')
+        .data(['0.0 - 0.9', '0.0 - 0.9', '1.0 - 1.9', '2.0 - 2.9', '3.0 - 3.9', '4.0 - 4.9', '5.0 - 5.9', '6.0 - 6.9', '7.0 - 7.9', '8.0 +'])
+        .enter()
+        .append('text')
+        .attr('x', function(d, i) { return 150 + ((i - 1) * 60)})
+        .attr('y', 35)
+        .text(function(d) { return d; })
+        .style('fill', 'black');
 }
 
-function getMagnitudeFillClass(magnitude) {
-    var magnitudeInt = parseInt(magnitude);
-    if (magnitudeInt < 1) return "mag0";
-    if (magnitudeInt < 2) return "mag1";
-    if (magnitudeInt < 3) return "mag2";
-    if (magnitudeInt < 4) return "mag3";
-    if (magnitudeInt < 5) return "mag4";
-    if (magnitudeInt < 6) return "mag5";
-    if (magnitudeInt < 7) return "mag6";
-    if (magnitudeInt < 8) return "mag7";
-    if (magnitudeInt >= 8) return "mag8plus";
-}
-
-function getHeight(data, magnitude) {
-    var key = Object.keys(data)[0];
-    if (!data[key][magnitude]) return 0;
-    return yScale(data[key][magnitude]);
-}
-
-function getX(data, i) {
-    return margin.left + xScale(i + 1) - (barWidth / 2);
-}
-
-function getY(data, i, magnitude) {
-    var key = Object.keys(data)[0];
-    if (!data[key][magnitude]) return 0;
-    var yValue = height - margin.bottom;
-    var magnitudeInt = parseInt(magnitude);
-    while (magnitudeInt >= 0) {
-        if (data[key][(magnitudeInt + ".0")]) yValue -= (yScale(data[key][(magnitudeInt + ".0")]));
-        magnitudeInt--;
-    } 
-    return yValue;
-}
-
-function showTooltip(d, magnitude) {
+function showTooltip(d) {
     var key = Object.keys(d)[0];
-    document.getElementById('tooltip').innerHTML=d[key][magnitude];
-    if (!d[key][magnitude]) return;
+    document.getElementById('tooltip').innerHTML=d["Magnitude"];
+    if (!d["Magnitude"]) return;
     div.transition()
         .style("opacity", 1)
         .style("left", (d3.event.pageX) + "px")
         .style("top", (d3.event.pageY - 28) + "px");
-}
-
-function hideTooltip(d) {
-    div.transition()
-        .style("opacity", 0);
 }
 
 function clearChart() {
@@ -191,123 +186,6 @@ function clearChart() {
     d3.selectAll('.tooltip')
         .remove();
     d3.selectAll('g')
-        .remove();
-}
-
-function aggregateBy(caller, parameter) {
-    var btns = document.getElementsByClassName("aggregateBy");
-    _.forEach(btns, function(value) {
-        value.className = value.className.replace(/\bactive\b/,'');
-    });
-    caller.className = caller.className + " active";
-    clearChart();
-    loadChart(parameter);
-}
-
-function setTimeRangeOptions(allOptions, menu, preserveMenuLabel) {
-    var menus;
-    if (menu) {
-        menus = [menu];
-    } else {
-        menus = document.getElementsByClassName("timemenu");
-    }
-    _.forEach(menus, function(menu) {
-        // Set default button label
-        if (!preserveMenuLabel) {
-            var menuBtn = menu.parentElement.getElementsByClassName("btn")[0];        
-            menuBtn.innerHTML = "Range " + _.capitalize(menu.id.substring(5)) + "<span class='caret'></span>";
-        }
-        // Set options
-        menu.innerHTML = "";
-        allOptions.sort(function(a,b) { 
-            return new Date(a).getTime() - new Date(b).getTime() 
-        });
-        _.forEach(allOptions, function(option) {
-            var li = document.createElement("li");
-            var a = document.createElement("a");
-            a.className = "timeOption";
-            a.setAttribute("href", "#");
-            var optionText;
-            if (option.getYear() > 1) {
-                // Using days
-                optionText = option.toISOString().substring(0, 10);
-            } else {
-                optionText = formatAMPM(option);
-            }
-            a.appendChild(document.createTextNode(optionText));
-            li.appendChild(a);
-            menu.appendChild(li);
-        });
-    });
-    setOptionsChangeText(allOptions);
-}
-
-function formatAMPM(date) {
-  var hours = date.getHours();
-  if (hours < 10) hours = "0" + hours;
-  var strTime = hours + ':00';
-  return strTime;
-}
-
-function setOptionsChangeText(allOptions) {
-    var options = document.getElementsByClassName("timeOption");
-    _.forEach(options, function(option) {
-        option.onclick =  function(e) {
-            // Change options for the other menu
-            var timeSelected = getDateFromOption(e.target.innerHTML); // Split to handle both hours and dates
-            var otherList;
-            if (e.target.parentElement.parentElement.id == "rangestart") {
-                otherList = document.getElementById("rangeend");
-            } else if (e.target.parentElement.parentElement.id == "rangeend") {
-                otherList = document.getElementById("rangestart");
-            } else {
-                return;
-            }
-            setTimeRangeOptions(allOptions, otherList, true);
-            var otherOptions = otherList.getElementsByTagName("li");
-            var toRemove = [];
-            _.forEach(otherOptions, function(otherOption) {
-                var otherOptionText = otherOption.getElementsByTagName("a")[0].innerHTML;
-                var otherTime = getDateFromOption(otherOptionText);
-                if (otherList.id == "rangeend" && otherTime.getTime() < timeSelected.getTime()) {
-                    toRemove.push(otherOption);
-                } else if (otherList.id == "rangestart" && otherTime.getTime() > timeSelected.getTime()) {
-                    toRemove.push(otherOption);  
-                }
-            });
-            _.forEach(toRemove, function(otherOption) {
-                otherList.removeChild(otherOption);
-            });
-            // Make the selection visibly persist
-            var menuBtn = e.target.parentElement.parentElement.parentElement.getElementsByClassName("btn")[0];
-            menuBtn.innerHTML = e.target.innerHTML + "<span class='caret'></span>";
-            // Re-render chart
-            clearChart();
-            loadChart(currAggregateBy, true);
-        }
-    });
-}
-
-function getDateFromOption(timeStr) {
-    var time;
-    if (timeStr.indexOf(":") != -1) { // Hour
-        time = new Date("2000-01-" + (parseInt(timeStr.split(":")[0]) + 1));
-    } else {
-        time = new Date(timeStr);
-    }
-    return time;
-}
-
-function removeOutOfRange() {
-    var chart = d3.select('.chart'); 
-    chart
-        .data(data)
-        .selectAll('.mag0rects')
-        .selectAll('rect')
-        .data(function(d, i) {
-            if (i == 0) return d;
-        })
-        .transition()
         .remove();
 }
 
