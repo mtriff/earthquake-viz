@@ -118,12 +118,9 @@ function renderChart(data, aggregateBy, preserveMenuLabel) {
         .data(data)
         .enter()
         .append('rect')
-        .attr('class', getTsunamiMagnitudeFillClass(magnitude0))
+        .attr('class', function(d) { return getTsunamiCountFillClass(d); })
         .attr('width', barWidth)
-        .attr('height', function(data) { 
-            var value = getHeight(data, magnitude0);
-            console.log(value);
-            return value; })
+        .attr('height', function(data) { return getHeight(data, magnitude0); })
         .attr('x', getX)
         .attr('y', function(data, i) { return getY(data, i, magnitude0); })
         .on("mouseover", function(data) { showTooltip(data, magnitude0); })
@@ -178,7 +175,7 @@ function renderChart(data, aggregateBy, preserveMenuLabel) {
         .range([margin.top, height - margin.bottom]);
 
     var yAxis = d3.axisLeft(yAxisScale)
-        .ticks(maxHeight / 10, "s");
+        .ticks(maxHeight / 50, "s");
 
     chart
         .append("g")
@@ -188,7 +185,7 @@ function renderChart(data, aggregateBy, preserveMenuLabel) {
     // Add legend
     var legend = d3.selectAll(".legend")
         .attr("height", 40)
-        .attr("width", 700);
+        .attr("width", 780);
     legend
         .selectAll('text')
         .data(['Magnitude Legend:'])
@@ -202,15 +199,15 @@ function renderChart(data, aggregateBy, preserveMenuLabel) {
         .enter()
         .append('rect')
         .attr('class', function(d) { return getTsunamiMagnitudeFillClass(d) })
-        .attr('x', function(d, i) { return 150 + (i * 60)} )
-        .attr('width', '55')
+        .attr('x', function(d, i) { return 150 + (i * 70)} )
+        .attr('width', '65')
         .attr('height', '20');
     legend
         .selectAll('text')
-        .data(['0.0 - 0.9', '0.0 - 0.9', '1.0 - 1.9', '2.0 - 2.9', '3.0 - 3.9', '4.0 - 4.9', '5.0 - 5.9', '6.0 - 6.9', '7.0 - 7.9', '8.0 +'])
+        .data(['---', '1 - 99', '100 - 149', '150 - 199', '200 - 249', '250 - 299', '300 - 349', '350 - 399', '400 - 449', '450 +'])
         .enter()
         .append('text')
-        .attr('x', function(d, i) { return 150 + ((i - 1) * 60)})
+        .attr('x', function(d, i) { return 150 + ((i - 1) * 70)})
         .attr('y', 35)
         .text(function(d) { return d; })
         .style('fill', 'black');
@@ -219,7 +216,7 @@ function renderChart(data, aggregateBy, preserveMenuLabel) {
 function getHeight(data, magnitude) {
     var key = Object.keys(data)[0];
     if (!data[key]) return 0;
-    return height - yScale(data[key]);
+    return yScale(data[key]);
 }
 
 function getX(data, i) {
@@ -228,13 +225,7 @@ function getX(data, i) {
 
 function getY(data, i, magnitude) {
     var key = Object.keys(data)[0];
-    var yValue = height - margin.bottom - yScale(data[key]);
-    // var magnitudeInt = parseInt(magnitude);
-    // while (magnitudeInt >= 0) {
-    //     if (data[key][(magnitudeInt + ".0")]) yValue -= (yScale(data[key][(magnitudeInt + ".0")]));
-    //     magnitudeInt--;
-    // } 
-    return yValue;
+    return height - margin.bottom - yScale(parseInt(data[key]));
 }
 
 function showTooltip(d, magnitude) {
@@ -253,6 +244,20 @@ function clearChart() {
         .remove();
     d3.selectAll('.tooltip')
         .remove();
+}
+
+function getTsunamiCountFillClass(d) {
+    var key = Object.keys(d)[0];
+    var countInt = parseInt(d[key]);
+    if (countInt < 100) return "tsunami0";
+    if (countInt < 150) return "tsunami1";
+    if (countInt < 200) return "tsunami2";
+    if (countInt < 250) return "tsunami3";
+    if (countInt < 300) return "tsunami4";
+    if (countInt < 350) return "tsunami5";
+    if (countInt < 400) return "tsunami6";
+    if (countInt < 450) return "tsunami7";
+    if (countInt >= 450) return "tsunami8plus";
 }
 
 document.getElementsByTagName("body")[0].onload = loadChart("QuakeDate");
