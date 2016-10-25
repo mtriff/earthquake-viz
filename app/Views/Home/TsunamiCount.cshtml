@@ -4,6 +4,13 @@
 <h2>@ViewData["Title"].</h2>
 <h3>@ViewData["Message"]</h3>
 
+<div class="loader"></div>
+<script type="text/javascript">
+    $(window).load(function() {
+	    $(".loader").fadeOut("slow");
+    })
+</script>
+
 <script>var rawData = @Html.Raw(@ViewData["TsunamiData"])</script>
 
 <div id="parameters" class="col-md-12">
