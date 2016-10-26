@@ -110,7 +110,7 @@ function renderChart(data, aggregateBy, preserveMenuLabel) {
         .attr('width', width)
         .attr('height', height);
     
-    // // Create bars for magnitude 0 earthquakes
+    // Create bars for the tsunami counts
     var mag0rects = chart.append('g').attr('class', 'mag0rects');
     var magnitude0 = "0.0";
     mag0rects
@@ -188,7 +188,7 @@ function renderChart(data, aggregateBy, preserveMenuLabel) {
         .attr("width", 780);
     legend
         .selectAll('text')
-        .data(['Magnitude Legend:'])
+        .data(['Amount Legend:'])
         .enter()
         .append('text')
         .attr('y', 25)

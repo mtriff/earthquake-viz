@@ -25,6 +25,8 @@ textarea {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    padding-top: 2em;
+    padding-bottom: 2em;
 }
 
 .row 
@@ -44,12 +46,13 @@ textarea {
 
 .navbar-quake-custom:link, .navbar-quake-custom:visited
 {
-    color: black
+    color: black;
+    text-decoration: none
 }
 
 .navbar-quake-custom:hover, .navbar-quake-custom:active
 {
-    color: #2009DD;
+    color: #337ab7; /*#2009DD;*/
     background-color: #add8a9 !important
 }
 
