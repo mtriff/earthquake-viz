@@ -1,0 +1,170 @@
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Set widths on the form inputs since otherwise they're 100% wide */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+/* Splash screen - Earthquake Viz with graphic*/
+.splashimage img[src$=".PNG"]
+{
+    width: 75%;
+    height: 75%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
+.row 
+{
+    border-radius: 25px;
+    background: #add8a9;
+    padding: 20px;  
+}
+
+.navbar-fixed-top 
+{
+    background: #add8a9;
+}
+
+.navbar-brand { color: black !important }
+.navbar-brand:visited { color: black !important }
+
+.navbar-quake-custom:link, .navbar-quake-custom:visited
+{
+    color: black;
+    text-decoration: none
+}
+
+.navbar-quake-custom:hover, .navbar-quake-custom:active
+{
+    color: #337ab7; /*#2009DD;*/
+    background-color: #add8a9 !important
+}
+
+.loader {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url('~/images/loading.gif') 50% 50% no-repeat rgb(249,249,249);
+}
+
+/*.chart rect {
+  fill: steelblue;
+}*/
+
+.chart text {
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 30px;
+  height: 20px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: #E3F2FD;
+  border: 0px;
+  border-radius: 2px;
+}
+
+.tsunami0 {
+    fill: #0D47A1
+}
+
+.tsunami1 {
+    fill: #1565C0
+}
+
+.tsunami2 {
+    fill: #1976D2
+}
+
+.tsunami3 {
+    fill: #1E88E5
+}
+
+.tsunami4 {
+    fill: #2196F3
+}
+
+.tsunami5 {
+    fill: #42A5F5
+}
+
+.tsunami6 {
+    fill: #64B5F6
+}
+
+.tsunami7 {
+    fill: #90CAF9
+}
+
+.tsunami8plus {
+    fill: #BBDEFB
+}
+
+.mag0 {
+    fill: #33691E
+}
+
+.mag1 {
+    fill: #558B2F
+}
+
+.mag2 {
+    fill: #689F38
+}
+
+.mag3 {
+    fill: #7CB342
+}
+
+.mag4 {
+    fill: #8BC34A
+}
+
+.mag5 {
+    fill: #9CCC65
+}
+
+.mag6 {
+    fill: #AED581
+}
+
+.mag7 {
+    fill: #C5E1A5
+}
+
+.mag8plus {
+    fill: #DCEDC8
+}
+
+.land {
+  fill: #222;
+}
+
+.boundary {
+  fill: none;
+  stroke: #fff;
+  stroke-width: .5px;
+}
