@@ -1,7 +1,8 @@
-package com.mtriff.controller;
+package com.mtriff.resources;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -24,7 +25,10 @@ public class MagnitudeResource {
     public String getIndex() {
         Map<String, Object> dataModel = new HashMap<String, Object>();
         dataModel.put("Title", "Global Earthquakes by Magnitude");
-        dataModel.put("QuakeData", dao.getQuakeData());
+//        dataModel.put("QuakeData", dao.getQuakeData());
+        String userStr = dao.getUser();
+        Logger.getAnonymousLogger().info(userStr);
+        dataModel.put("QuakeData", userStr);
     	return FreemakerConfig.getRenderedTemplate("Magnitude", dataModel);
     }
 }

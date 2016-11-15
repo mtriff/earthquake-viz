@@ -1,4 +1,4 @@
-package com.mtriff.controller;
+package com.mtriff.resources;
 
 import java.io.File;
 import java.io.IOException;

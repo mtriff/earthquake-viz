@@ -3,14 +3,10 @@ package com.mtriff;
 import java.io.IOException;
 import java.net.URI;
 
-import javax.xml.ws.spi.http.HttpHandler;
-
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
-
-import com.mtriff.controller.FreemakerConfig;
 
 /**
  * Main class.
@@ -25,7 +21,7 @@ public class Main {
      * @return Grizzly HTTP server.
      */
     public static HttpServer startServer() {
-        final ResourceConfig rc = new ResourceConfig().packages("com.mtriff.controller");
+        final ResourceConfig rc = new ResourceConfig().packages("com.mtriff.resources");
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
         StaticHttpHandler imageHandler = new StaticHttpHandler("src/main/java/com/mtriff/html/images");
         StaticHttpHandler jsHandler = new StaticHttpHandler("src/main/java/com/mtriff/html/js");
