@@ -22,6 +22,7 @@ public class Main {
      */
     public static HttpServer startServer() {
         final ResourceConfig rc = new ResourceConfig().packages("com.mtriff.resources");
+        rc.register(AuthenticationFilter.class);
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(URI.create(BASE_URI), rc);
         StaticHttpHandler imageHandler = new StaticHttpHandler("src/main/java/com/mtriff/html/images");
         StaticHttpHandler jsHandler = new StaticHttpHandler("src/main/java/com/mtriff/html/js");
@@ -39,7 +40,8 @@ public class Main {
      * @param args
      * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    @SuppressWarnings("deprecation")
+	public static void main(String[] args) throws IOException {
         final HttpServer server = startServer();
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));

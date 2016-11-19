@@ -3,7 +3,10 @@ package com.mtriff.resources;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -20,17 +23,13 @@ public class UserResource {
 	DatabaseAccessObject dao;
 	ObjectMapper objectMapper;
 	
-	private DatabaseAccessObject getDAO() {
-		if (dao == null) dao = new DatabaseAccessObject();
-		return dao;
-	}
-	
 	private ObjectMapper getObjectMapper() {
 		if (objectMapper == null) objectMapper = new ObjectMapper();
 		return objectMapper;
 	}
 	
 	@SuppressWarnings("deprecation")
+	@PermitAll
 	@POST @Path("create")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createUser(String body) {
@@ -40,7 +39,7 @@ public class UserResource {
 			newUser = getObjectMapper().readValue(body, DBUser.class);
 			newUser.createNewPassword(newUser.getPassword());
 			// insert user
-			getDAO().createUser(newUser);
+			DatabaseAccessObject.getDAO().createUser(newUser);
 			return Response.ok(getObjectMapper().writerWithType(User.class).writeValueAsString(newUser)).build();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -48,8 +47,11 @@ public class UserResource {
 		}
 	}
 	
-	public String updateUserSettings(User user) {
+	@RolesAllowed("USER")
+	@PUT @Path("update")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response updateUserSettings(User user) {
 		// update user
-		return null;
+		return Response.ok().build();
 	}
 }

@@ -14,6 +14,8 @@ import com.mtriff.models.User;
 
 public class DatabaseAccessObject {
 	
+	private static DatabaseAccessObject dao;
+	
 	private Datastore datastore;
 	private ObjectMapper objectMapper;
 	
@@ -26,6 +28,11 @@ public class DatabaseAccessObject {
 		objectMapper = new ObjectMapper();
 	}
 	
+	public static DatabaseAccessObject getDAO() {
+		if (dao == null) dao = new DatabaseAccessObject();
+		return dao;
+	}
+	
 	public String getQuakeData() {
 		return "{}";
 	}
@@ -34,22 +41,16 @@ public class DatabaseAccessObject {
 		return "{}";
 	}
 	
+	public boolean verifyCredentials(String email, String password) {
+		List<DBUser> userList = getUserList(email);
+		if (!userList.isEmpty()) {
+			return userList.get(0).verifyPassword(password);
+		}
+		return false;
+	}
+	
 	public String getUser(String email) {
-//		// Test for now, should get user from database
-//		User user = new User();
-//		user.setEmail("matt@gmail.com");
-//		BarChartSetting earthquakeMagnitude = new BarChartSetting();
-//		earthquakeMagnitude.setAggregateBy("By Day");
-//		user.setEarthquakeMagnitudeSettings(earthquakeMagnitude);
-//		try {
-//			return objectMapper.writeValueAsString(user);
-//		} catch (JsonProcessingException e) {
-//			e.printStackTrace();
-//		}
-		Logger.getAnonymousLogger().info("Getting user with email: " + email);
-		List<DBUser> userList = datastore.createQuery(DBUser.class)
-											.field("email").equalIgnoreCase(email)
-											.asList();
+		List<DBUser> userList = getUserList(email);
 		if (userList.isEmpty()) {
 			return "{}";
 		}
@@ -60,6 +61,14 @@ public class DatabaseAccessObject {
 			e.printStackTrace();
 			return "{}";
 		}
+	}
+	
+	private List<DBUser> getUserList(String email) {
+		Logger.getAnonymousLogger().info("Getting user with email: " + email);
+		List<DBUser> userList = datastore.createQuery(DBUser.class)
+											.field("email").equalIgnoreCase(email)
+											.asList();
+		return userList;
 	}
 	
 	public void createUser(DBUser user) {
