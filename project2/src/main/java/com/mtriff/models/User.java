@@ -2,12 +2,19 @@ package com.mtriff.models;
 
 public class User {
 	
+	private String name;
 	private String email;
 	private BarChartSetting earthquakeMagnitudeSettings;
 	private MapChartSetting earthquakeLocationSettings;
 	private BarChartSetting tsunamiOccurrenceSettings;
 	private MapChartSetting tsunamiLocationSettings;
 	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public String getEmail() {
 		return email;
 	}
