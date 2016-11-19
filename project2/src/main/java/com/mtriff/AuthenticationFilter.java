@@ -40,6 +40,34 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
     private static final Response ACCESS_FORBIDDEN = Response.status(Response.Status.FORBIDDEN)
                                                         .entity("{ \"result\": \"FORBIDDEN\" } ").build();
       
+    public static String[] getAuthorization(ContainerRequestContext requestContext) {
+        //Get request headers
+        final MultivaluedMap<String, String> headers = requestContext.getHeaders();
+          
+        //Fetch authorization header
+        final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
+          
+        //If no authorization information present; block access
+        if(authorization == null || authorization.isEmpty())
+        {
+            requestContext.abortWith(ACCESS_DENIED);
+            return null;
+        }
+    	
+    	//Get encoded username and password
+        final String encodedUserPassword = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
+          
+        //Decode username and password
+        String usernameAndPassword = new String(Base64.decode(encodedUserPassword.getBytes()));;
+
+        //Split username and password tokens
+        final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
+        final String username = tokenizer.nextToken();
+        final String password = tokenizer.nextToken();
+        
+        return new String[] { username, password };
+    }
+    
     @Override
     public void filter(ContainerRequestContext requestContext)
     {
@@ -53,39 +81,17 @@ public class AuthenticationFilter implements javax.ws.rs.container.ContainerRequ
                 requestContext.abortWith(ACCESS_FORBIDDEN);
                 return;
             }
-              
-            //Get request headers
-            final MultivaluedMap<String, String> headers = requestContext.getHeaders();
-              
-            //Fetch authorization header
-            final List<String> authorization = headers.get(AUTHORIZATION_PROPERTY);
-              
-            //If no authorization information present; block access
-            if(authorization == null || authorization.isEmpty())
-            {
-                requestContext.abortWith(ACCESS_DENIED);
-                return;
-            }
-              
-            //Get encoded username and password
-            final String encodedUserPassword = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
-              
-            //Decode username and password
-            String usernameAndPassword = new String(Base64.decode(encodedUserPassword.getBytes()));;
-  
-            //Split username and password tokens
-            final StringTokenizer tokenizer = new StringTokenizer(usernameAndPassword, ":");
-            final String username = tokenizer.nextToken();
-            final String password = tokenizer.nextToken();
-              
+               
             //Verify user access
             if(method.isAnnotationPresent(RolesAllowed.class))
             {
                 RolesAllowed rolesAnnotation = method.getAnnotation(RolesAllowed.class);
                 Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAnnotation.value()));
-                  
+
+                String[] authValues = getAuthorization(requestContext);
+                
                 //Is user valid?
-                if( ! isUserAllowed(username, password, rolesSet))
+                if( ! isUserAllowed(authValues[0], authValues[1], rolesSet))
                 {
                     requestContext.abortWith(ACCESS_DENIED);
                     return;

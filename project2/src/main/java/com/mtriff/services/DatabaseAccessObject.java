@@ -6,11 +6,9 @@ import java.util.logging.Logger;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClient;
 import com.mtriff.models.DBUser;
-import com.mtriff.models.User;
 
 public class DatabaseAccessObject {
 	
@@ -49,18 +47,14 @@ public class DatabaseAccessObject {
 		return false;
 	}
 	
-	public String getUser(String email) {
+	public DBUser getUser(String email) {
 		List<DBUser> userList = getUserList(email);
 		if (userList.isEmpty()) {
-			return "{}";
+			return null;
 		}
-		User user = userList.get(0);
-		try {
-			return objectMapper.writeValueAsString(user);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-			return "{}";
-		}
+		DBUser user = userList.get(0);
+		return user;
+//		return objectMapper.writeValueAsString(user);
 	}
 	
 	private List<DBUser> getUserList(String email) {
@@ -71,8 +65,8 @@ public class DatabaseAccessObject {
 		return userList;
 	}
 	
-	public void createUser(DBUser user) {
-		Logger.getAnonymousLogger().info("Creating user: " + user.getEmail());
+	public void saveUser(DBUser user) {
+		Logger.getAnonymousLogger().info("Saving user: " + user.getEmail());
 		datastore.save(user);
 	}
 	

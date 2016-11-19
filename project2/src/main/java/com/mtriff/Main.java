@@ -8,6 +8,8 @@ import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
+import com.mtriff.services.DatabaseAccessObject;
+
 /**
  * Main class.
  *
@@ -43,6 +45,7 @@ public class Main {
     @SuppressWarnings("deprecation")
 	public static void main(String[] args) throws IOException {
         final HttpServer server = startServer();
+        DatabaseAccessObject.getDAO();
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
         System.in.read();
