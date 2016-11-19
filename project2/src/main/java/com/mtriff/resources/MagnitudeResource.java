@@ -26,9 +26,9 @@ public class MagnitudeResource {
         Map<String, Object> dataModel = new HashMap<String, Object>();
         dataModel.put("Title", "Global Earthquakes by Magnitude");
 //        dataModel.put("QuakeData", dao.getQuakeData());
-        String userStr = dao.getUser();
-        Logger.getAnonymousLogger().info(userStr);
-        dataModel.put("QuakeData", userStr);
+//        String userStr = dao.getUser();
+//        Logger.getAnonymousLogger().info(userStr);
+//        dataModel.put("QuakeData", userStr);
     	return FreemakerConfig.getRenderedTemplate("Magnitude", dataModel);
     }
 }
