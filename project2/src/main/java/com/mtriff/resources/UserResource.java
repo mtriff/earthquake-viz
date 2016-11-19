@@ -14,7 +14,6 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mtriff.AuthenticationFilter;
 import com.mtriff.models.DBUser;
@@ -73,17 +72,20 @@ public class UserResource {
 	@RolesAllowed("USER")
 	@PUT @Path("update")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response updateUserSettings(User user) {
-		DBUser dbUser = DatabaseAccessObject.getDAO().getUser(user.getEmail());
-		dbUser.setEarthquakeMagnitudeSettings(user.getEarthquakeMagnitudeSettings());
-		dbUser.setEarthquakeLocationSettings(user.getEarthquakeLocationSettings());
-		dbUser.setTsunamiOccurrenceSettings(user.getTsunamiOccurrenceSettings());
-		dbUser.setTsunamiLocationSettings(user.getTsunamiLocationSettings());
-		DatabaseAccessObject.getDAO().saveUser(dbUser);
+	public Response updateUserSettings(String body) {
+		User user;
 		try {
+			user = getObjectMapper().readValue(body, User.class);
+			DBUser dbUser = DatabaseAccessObject.getDAO().getUser(user.getEmail());
+			dbUser.setName(user.getName());
+			dbUser.setEarthquakeMagnitudeSettings(user.getEarthquakeMagnitudeSettings());
+			dbUser.setEarthquakeLocationSettings(user.getEarthquakeLocationSettings());
+			dbUser.setTsunamiOccurrenceSettings(user.getTsunamiOccurrenceSettings());
+			dbUser.setTsunamiLocationSettings(user.getTsunamiLocationSettings());
+			DatabaseAccessObject.getDAO().saveUser(dbUser);
 			return Response.ok(getObjectMapper().writerWithType(User.class).writeValueAsString(dbUser)).build();
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
 			return Response.serverError().build();
 		}
 	}

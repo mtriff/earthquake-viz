@@ -42,12 +42,12 @@
 							<div id="login-div" class="col-md-12">
 								 <form class="form" role="form" accept-charset="UTF-8" id="login-nav">
 										<div class="form-group">
-											 <label class="sr-only" for="exampleInputEmail2">Email address</label>
-											 <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Email Address" required>
+											 <label class="sr-only" for="email-login">Email address</label>
+											 <input type="email" class="form-control" id="email-login" placeholder="Email Address" required>
 										</div>
 										<div class="form-group">
-											 <label class="sr-only" for="exampleInputPassword2">Password</label>
-											 <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password" required>
+											 <label class="sr-only" for="password-login">Password</label>
+											 <input type="password" class="form-control" id="password-login" placeholder="Password" minlength=4 required>
 										</div>
 										<div class="form-group">
 											 <button class="btn btn-success btn-block" onclick="loginUser()">Sign in</button>
@@ -65,12 +65,12 @@
 											 <input type="text" class="form-control" id="name" placeholder="Name" required>
 										</div>
 										<div class="form-group">
-											 <label class="sr-only" for="exampleInputEmail2">Email address</label>
-											 <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Email Address" required>
+											 <label class="sr-only" for="email-register">Email address</label>
+											 <input type="email" class="form-control" id="email-register" placeholder="Email Address" required>
 										</div>
 										<div class="form-group">
-											 <label class="sr-only" for="exampleInputPassword2">Password</label>
-											 <input type="password" class="form-control" id="exampleInputPassword2" placeholder="Password" required>
+											 <label class="sr-only" for="password-register">Password</label>
+											 <input type="password" class="form-control" id="password-register" placeholder="Password" required>
 										</div>
 										<div class="form-group">
 											 <button class="btn btn-success btn-block" onclick="registerUser()">Register</button>
