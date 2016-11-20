@@ -42,19 +42,31 @@ function registerUser() {
 		dataType: "json",
 		data: JSON.stringify(newUser),
 		success: function(result) {
-			alert("Success!");
+			$.notify({
+				// options
+				message: 'Welcome, ' + result.name + '. You have been logged in.' 
+			},{
+				// settings
+				type: 'success'
+			});
 			console.log(result);
 			setUserSession(result);
 			sessionStorage.setItem("authorization", auth);
 			displayUsername();
+			$(".dropdown-toggle").dropdown("toggle");
 			showLogoutForm();
 		},
 		error: function(err) {
-			alert("Error!");
+			$.notify({
+				// options
+				message: 'There was an issue registering your account. Please check the details and try again.' 
+			},{
+				// settings
+				type: 'warning'
+			});
 			console.log(err);
 		}
 	});
-	$(".dropdown-toggle").dropdown("toggle");
 }
 
 function loginUser() {
@@ -69,19 +81,30 @@ function loginUser() {
 			  "Authorization": auth
 		},
 		success: function(result) {
-			alert("Logged in!");
-			console.log(result);
+			$.notify({
+				// options
+				message: 'Welcome back, ' + result.name + '!' 
+			},{
+				// settings
+				type: 'success'
+			});
 			setUserSession(result);
 			sessionStorage.setItem("authorization", auth);
 			displayUsername();
+			$(".dropdown-toggle").dropdown("toggle");
 			showLogoutForm();
 		},
 		error: function(err) {
-			alert("Error!");
-			console.log(err);
+			$.notify({
+				// options
+				message: 'Your login credentials were not correct.' 
+			},{
+				// settings
+				type: 'warning'
+			});
+			console.err(err);
 		}
 	});
-	$(".dropdown-toggle").dropdown("toggle");
 }
 
 function saveUser() {
@@ -95,13 +118,17 @@ function saveUser() {
 			  "Authorization": sessionStorage.getItem("authorization")
 		},
 		success: function(result) {
-			alert("Updated user!");
-			console.log(result);
 			setUserSession(result);
 			displayUsername();
 		},
 		error: function(err) {
-			alert("Error!");
+			$.notify({
+				// options
+				message: 'There was an error saving your settings.' 
+			},{
+				// settings
+				type: 'danger'
+			});
 			console.log(err);
 		}
 	});
@@ -112,6 +139,13 @@ function logoutUser() {
 	displayUsername();
 	$(".dropdown-toggle").dropdown("toggle");
 	showLoginForm();
+	$.notify({
+		// options
+		message: 'You have been signed out.' 
+	},{
+		// settings
+		type: 'success'
+	});
 }
 
 function displayUsername() {
@@ -131,4 +165,11 @@ function setUserSession(user) {
 
 function getUserSession() {
 	return sessionStorage.getItem("user");
+}
+
+function loadUserSettings() {
+	if (getUserSession()) {
+		displayUsername();
+		showLogoutForm();	
+	}
 }
