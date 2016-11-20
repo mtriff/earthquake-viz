@@ -7,8 +7,15 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mtriff.models.DBUser;
+import com.mtriff.models.MagnitudeLocation;
+import java.util.Iterator;
+import static org.mongodb.morphia.aggregation.Projection.expression;
+import static org.mongodb.morphia.aggregation.Projection.projection;
+import org.mongodb.morphia.query.CriteriaContainer;
+import org.mongodb.morphia.query.Query;
 
 public class DatabaseAccessObject {
 	
@@ -31,8 +38,37 @@ public class DatabaseAccessObject {
 		return dao;
 	}
 	
-	public String getQuakeData() {
-		return "{}";
+	public Iterator<MagnitudeLocation> getQuakeData() {
+            Logger.getAnonymousLogger()
+                    .info("Getting magnitude by location data");
+            Query<Object> query = datastore.getQueryFactory()
+                    .createQuery(datastore);
+            query.and(query.criteria("properties.mag").exists(),
+                    query.criteria("properties.mag").greaterThanOrEq(0.0));
+            Iterator<MagnitudeLocation> magLocData = null;
+            
+            try
+            {
+                magLocData = datastore
+                        .createAggregation(MagnitudeLocation.class)
+                        .match(query.field("properties.mag").greaterThanOrEq(0.0))
+                        .project(
+//                                projection("myDayOfYear", expression("$dateToString",
+//                                        new BasicDBObject("format", "%Y-%m-%d").
+//                                                append("date", projection("properties.time")))))
+//                                projection("myHourOfDay", expression("$hour", projection("properties.time"))),
+                                projection("magnitude", "properties.mag"))
+//                                projection("Latitude", expression("$arrayAtElem", 
+//                                        new BasicDBObject("$geometry.coordinates", 1))),
+//                                projection("Longitude", expression("$arrayAtElem", 
+//                                        new BasicDBObject("$geometry.coordinates", 0))))
+                        .aggregate(MagnitudeLocation.class);
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+            return magLocData;
 	}
 	
 	public String getTsunamiData() {
