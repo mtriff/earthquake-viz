@@ -1,4 +1,4 @@
-package com.mtriff.controller;
+package com.mtriff.resources;
 
 import java.util.HashMap;
 import java.util.Map;

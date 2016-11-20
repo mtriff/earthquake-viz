@@ -1,4 +1,4 @@
-package com.mtriff.controller;
+package com.mtriff.resources;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,12 +10,12 @@ import javax.ws.rs.core.MediaType;
 
 import com.mtriff.services.DatabaseAccessObject;
 
-@Path("TsunamiCount")
-public class TsunamiCountResource {
-		
+@Path("QuakeLocation")
+public class QuakeLocationResource {
+	
 	DatabaseAccessObject dao;
 	
-	public TsunamiCountResource() {
+	public QuakeLocationResource() {
 		dao = new DatabaseAccessObject();
 	}
 	
@@ -23,8 +23,8 @@ public class TsunamiCountResource {
     @Produces(MediaType.TEXT_HTML)
     public String getIndex() {
         Map<String, Object> dataModel = new HashMap<String, Object>();
-        dataModel.put("Title", "Global Tsunami Occurrences");
-        dataModel.put("TsunamiData", dao.getTsunamiData());
-    	return FreemakerConfig.getRenderedTemplate("TsunamiCount", dataModel);
+        dataModel.put("Title", "Global Earthquakes by Location");
+        dataModel.put("QuakeData", dao.getQuakeData());
+    	return FreemakerConfig.getRenderedTemplate("QuakeLocation", dataModel);
     }
 }

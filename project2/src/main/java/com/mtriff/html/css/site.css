@@ -41,6 +41,20 @@ textarea {
     background: #add8a9;
 }
 
+.nav .open>a, .nav .open>a:focus, .nav .open>a:hover, .nav a.dropdown-toggle:hover{
+    background-color: #add8a9
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    background-color: #add8a9;
+    color: #add8a9;
+}
+
+ul.nav a.dropdown-toggle:hover { 
+	background-color: #add8a9 !important; 
+}
+
+
 .navbar-brand { color: black !important }
 .navbar-brand:visited { color: black !important }
 
@@ -167,4 +181,42 @@ div.tooltip {
   fill: none;
   stroke: #fff;
   stroke-width: .5px;
+}
+
+#login-dp{
+	width:20em;
+    min-width: 250px;
+    padding: 14px 14px 0;
+    overflow:hidden;
+    background-color:rgba(255,255,255,.8);
+}
+#login-dp #login-nav {
+	border-bottom:1px solid #ddd;
+}
+#login-dp .help-block{
+    font-size:12px    
+}
+#login-dp .bottom{
+    clear:both;
+    padding:14px;
+}
+#login-dp .form-group {
+    margin-bottom: 10px;
+}
+@media(max-width:768px){
+    #login-dp{
+        background-color: inherit;
+        color: #fff;
+    }
+    #login-dp .bottom{
+        background-color: inherit;
+        border-top:0 none;
+    }
+}
+.dropdown-toggle {
+	color: #000
+}
+
+#logout-div, #register-div {
+	display: none
 }
