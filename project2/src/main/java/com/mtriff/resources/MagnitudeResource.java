@@ -25,7 +25,7 @@ public class MagnitudeResource {
     public String getIndex() {
         Map<String, Object> dataModel = new HashMap<String, Object>();
         dataModel.put("Title", "Global Earthquakes by Magnitude");
-//        dataModel.put("QuakeData", dao.getQuakeData());
+        dataModel.put("QuakeData", dao.getQuakeAggregateData(false));
 //        String userStr = dao.getUser();
 //        Logger.getAnonymousLogger().info(userStr);
 //        dataModel.put("QuakeData", userStr);

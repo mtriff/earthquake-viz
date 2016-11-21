@@ -24,7 +24,7 @@ public class QuakeLocationResource {
     public String getIndex() {
         Map<String, Object> dataModel = new HashMap<String, Object>();
         dataModel.put("Title", "Global Earthquakes by Location");
-        dataModel.put("QuakeData", dao.getQuakeData());
+        dataModel.put("QuakeData", dao.getQuakeData(false));
     	return FreemakerConfig.getRenderedTemplate("QuakeLocation", dataModel);
     }
 }
