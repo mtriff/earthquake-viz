@@ -7,6 +7,9 @@ package com.mtriff.models;
 
 import org.jongo.marshall.jackson.oid.MongoId;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.jaxrs.json.annotation.JSONP;
+
 /**
  *
  * @author macdre
@@ -17,46 +20,55 @@ public class MagnitudeAggregateData {
     private String id;
     private String myDayOfYear;
     private int myHourOfDay;
-    private int magnitude;
+    private double magnitude;
     private int count;
     
-    
+    @JsonProperty("Id")
     public String getId() {
         return id;
     }
 
+    @JsonProperty("Id")
     public void setId(String id) {
         this.id = id;
     }
     
+    @JsonProperty("QuakeDate")
     public String getDate() {
         return myDayOfYear;
     }
 
+    @JsonProperty("QuakeDate")
     public void setDate(String myDayOfYear) {
         this.myDayOfYear = myDayOfYear;
     }
 
+    @JsonProperty("QuakeHour")
     public int getHour() {
         return myHourOfDay;
     }
 
+    @JsonProperty("QuakeHour")
     public void setHour(int myHourOfDay) {
         this.myHourOfDay = myHourOfDay;
     }
 
-    public int getMagnitude() {
-        return magnitude;
+    @JsonProperty("Magnitude")
+    public String getMagnitude() {
+        return Double.valueOf(magnitude).toString();
     }
 
-    public void setMagnitude(int magnitude) {
+    @JsonProperty("Magnitude")
+    public void setMagnitude(double magnitude) {
         this.magnitude = magnitude;
     }
 
+    @JsonProperty("Count")
     public int getCount() {
         return count;
     }
 
+    @JsonProperty("Count")
     public void setCount(int count) {
         this.count = count;
     }
