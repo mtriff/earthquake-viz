@@ -10,10 +10,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mtriff.models.DBUser;
+import com.mtriff.models.LocationData;
+import com.mtriff.models.LocationType;
 import com.mtriff.models.MagnitudeAggregateData;
 import com.mtriff.models.MagnitudeLocation;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import org.geojson.Crs;
+import org.geojson.jackson.CrsType;
+import org.jongo.Aggregate;
+import org.jongo.Aggregate.ResultsIterator;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 
@@ -25,7 +32,13 @@ public class DatabaseAccessObject {
     private ObjectMapper objectMapper;
 
     private MongoCollection monthly;
-
+    private MongoCollection location;
+    
+    private Jongo jongo;
+    
+    private HashMap<String, LocationData> locationDataMap;
+    private LocationType currentLocationType = null;
+    
     public DatabaseAccessObject() {
             MongoClient mongo = new MongoClient();
             Morphia morphia = new Morphia();
@@ -35,9 +48,12 @@ public class DatabaseAccessObject {
             objectMapper = new ObjectMapper();
 
             DB mb = mongo.getDB("earthquakeviz");
-            Jongo jongo = new Jongo(mb);
+            jongo = new Jongo(mb);
             monthly = jongo.getCollection("monthly");
-
+            
+            // Initalize the location map with the default continent fileter
+            // type. This will avoid sluggish initial page load
+            configureLocationData(LocationType.CONTINENT);
     }
 
     public static DatabaseAccessObject getDAO() {
@@ -46,40 +62,54 @@ public class DatabaseAccessObject {
     }
 
     public Iterator<MagnitudeLocation> getQuakeData(boolean onlyTsunamis) {
+        return getQuakeData(onlyTsunamis, "");
+    }
+    
+    public Iterator<MagnitudeLocation> getQuakeData(boolean onlyTsunamis,
+            String continentFilter) {
 
-        Logger.getAnonymousLogger()
-                .info("Getting magnitude by location data");
+        Logger.getAnonymousLogger().info("Getting magnitude by location data");
         Iterator<MagnitudeLocation> magLocData = null;
-
-        String tsunamiString = "";
-        if(onlyTsunamis)
+        
+        LocationData la = null;
+       
+        if(!continentFilter.isEmpty()) 
         {
-            tsunamiString = ", \"properties.tsunami\": {$eq: 1}";
+            la = locationDataMap.get(continentFilter);            
         }
 
         try
         {
             Date theEpoch = new Date(0);
-            magLocData = monthly.
-                aggregate("{$match: {\"properties.mag\": "
-                        + "{$exists: true, $gt: 0.0}#}})", tsunamiString)
-                    .and("{$project: {_id: 0, "
-                            + "\"myDayOfYear\": "
-                                + "{\"$dateToString\": {format: "
-                                    + "\"%Y-%m-%d\", "
-                                    + "date: {\"$add\": "
-                                        + "[#, \"$properties.time\"]}}},"
-                            + "\"myHourOfDay\": "
-                                + "{\"$hour\":{\"$add\": "
-                                    + "[#, \"$properties.time\"]}},"
-                            + "magnitude: \"$properties.mag\", "
-                            + "\"latitude\": {$arrayElemAt: "
-                                + "[\"$geometry.coordinates\",1]}, "
-                            + "\"longitude\": {$arrayElemAt: "
-                                + "[\"$geometry.coordinates\",0]}}}", 
-                            theEpoch, theEpoch)
-                    .and("{$sort: {\"myDayOfYear\": 1}}")
-                    .as(MagnitudeLocation.class);
+            Aggregate a;
+            a = monthly.aggregate("{$match: {\"properties.mag\": "
+                + "{$exists: true, $gt: 0.0}#}})", 
+                    getTsunamiString(onlyTsunamis));        
+            
+            if(la != null)
+            {
+                String json = new ObjectMapper()
+                        .writeValueAsString(la.getGeometry());
+                a = a.and("{$match: {\"geometry\": "
+                        + "{$geoIntersects: {\"$geometry\": "
+                        + json + "}}}}");        
+            }
+          
+            magLocData = a.and("{$project: {_id: 0, "
+                    + "\"myDayOfYear\": "
+                        + "{\"$dateToString\": {format: "
+                            + "\"%Y-%m-%d\", "
+                            + "date: {\"$add\": [#, \"$properties.time\"]}}},"
+                    + "\"myHourOfDay\": "
+                        + "{\"$hour\":{\"$add\": [#, \"$properties.time\"]}},"
+                    + "magnitude: \"$properties.mag\", "
+                    + "\"latitude\": {$arrayElemAt: "
+                        + "[\"$geometry.coordinates\",1]}, "
+                    + "\"longitude\": {$arrayElemAt: "
+                        + "[\"$geometry.coordinates\",0]}}}", 
+                    theEpoch, theEpoch)
+                .and("{$sort: {\"myDayOfYear\": 1}}")
+                .as(MagnitudeLocation.class);
         }
         catch (Exception ex)
         {
@@ -90,44 +120,61 @@ public class DatabaseAccessObject {
 
     public Iterator<MagnitudeAggregateData> getQuakeAggregateData(
             boolean onlyTsunamis) {
+        return getQuakeAggregateData(onlyTsunamis, "");
+    }
+    
+    public Iterator<MagnitudeAggregateData> getQuakeAggregateData(
+            boolean onlyTsunamis, String continentFilter) {
 
-        Logger.getAnonymousLogger()
-                .info("Getting magnitude aggregate data");
+        Logger.getAnonymousLogger().info("Getting magnitude aggregate data");
         Iterator<MagnitudeAggregateData> magLocData = null;
 
-        String tsunamiString = "";
-        if(onlyTsunamis)
+        LocationData la = null;
+       
+        if(!continentFilter.isEmpty()) 
         {
-            tsunamiString = ", \"properties.tsunami\": {$eq: 1}";
+            la = locationDataMap.get(continentFilter);            
         }
-
+        
         try
         {
             Date theEpoch = new Date(0);
-            magLocData = monthly.
+            Aggregate a;
+            a = monthly.
                 aggregate("{$match: {\"properties.mag\": "
-                        + "{$exists: true, $gt: 0.0}#}}", tsunamiString)
-                    .and("{$project: {_id: 0, "
-                        + "\"myDayOfYear\": {\"$dateToString\": "
-                            + "{format: \"%Y-%m-%d\", date: "
-                                + "{\"$add\": [#, \"$properties.time\"]}}},"
-                        + "\"myHourOfDay\": {\"$hour\":{\"$add\": "
-                            + "[#, \"$properties.time\"]}}, "
-                        + "\"properties.mag\": 1}}", theEpoch, theEpoch)
-                    .and("{$group: "
-                        + "{_id: "
-                            + "{\"myDayOfYear\": \"$myDayOfYear\", "
-                            + "\"myHourOfDay\": \"$myHourOfDay\", "
-                            + "magnitude:{$trunc: \"$properties.mag\"}}, "
-                        + "count: {$sum: 1}}}")
-                    .and("{$sort: {\"_id\": 1}}")
-                    .and("{$project: "
-                        + "{_id: 0, "
-                        + "\"myDayOfYear\": \"$_id.myDayOfYear\", "
-                        + "\"myHourOfDay\": \"$_id.myHourOfDay\", "
-                        + "\"magnitude\": \"$_id.magnitude\", "
-                        + "count: \"$count\"}}")
-                    .as(MagnitudeAggregateData.class);
+                    + "{$exists: true, $gt: 0.0}#}}", 
+                    getTsunamiString(onlyTsunamis));
+            
+            if(la != null)
+            {
+                String json = new ObjectMapper()
+                    .writeValueAsString(la.getGeometry());
+                a = a.and("{$match: {\"geometry\": "
+                    + "{$geoIntersects: {\"$geometry\": "
+                    + json + "}}}}");        
+            }
+            
+            magLocData = a.and("{$project: {_id: 0, "
+                + "\"myDayOfYear\": {\"$dateToString\": "
+                    + "{format: \"%Y-%m-%d\", date: "
+                        + "{\"$add\": [#, \"$properties.time\"]}}},"
+                + "\"myHourOfDay\": {\"$hour\":{\"$add\": "
+                    + "[#, \"$properties.time\"]}}, "
+                    + "\"properties.mag\": 1}}", theEpoch, theEpoch)
+                .and("{$group: "
+                    + "{_id: "
+                        + "{\"myDayOfYear\": \"$myDayOfYear\", "
+                        + "\"myHourOfDay\": \"$myHourOfDay\", "
+                        + "magnitude:{$trunc: \"$properties.mag\"}}, "
+                    + "count: {$sum: 1}}}")
+                .and("{$sort: {\"_id\": 1}}")
+                .and("{$project: "
+                    + "{_id: 0, "
+                    + "\"myDayOfYear\": \"$_id.myDayOfYear\", "
+                    + "\"myHourOfDay\": \"$_id.myHourOfDay\", "
+                    + "\"magnitude\": \"$_id.magnitude\", "
+                    + "count: \"$count\"}}")
+                .as(MagnitudeAggregateData.class);
         }
         catch (Exception ex)
         {
@@ -136,10 +183,63 @@ public class DatabaseAccessObject {
         return magLocData;
     }
 
-    public String getTsunamiData() {
-            return "{}";
+    public void configureLocationData(LocationType lt) {
+        // Only initialize the location type if it is either not initialized
+        // Or if the type is changing.
+        if (currentLocationType == null || currentLocationType != lt)
+        {
+            currentLocationType = lt;
+            
+            Logger.getAnonymousLogger().info("Getting location data");
+            Iterator<LocationData> lai = null;
+            try
+            {
+                if (currentLocationType == LocationType.CONTINENT)
+                {
+                    location = jongo.getCollection("continents"); 
+                    
+                    lai = location.
+                        aggregate("{$unwind: \"$features\"}")
+                        .and("{$project: "
+                            + "{locationName: \"$features.properties.CONTINENT\","
+                            + "geometry: \"$features.geometry\"}}")
+                            .as(LocationData.class); 
+                }
+                else
+                {
+                    // TODO: Add support for plates here
+                }
+                
+                if(lai != null)
+                {
+                    locationDataMap = new HashMap<String, LocationData>();
+                    LocationData ld;
+                    while(lai.hasNext())
+                    {
+                        ld = lai.next();
+                        locationDataMap.put(ld.getLocationName(), ld);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.printStackTrace();
+            }
+        }
     }
 
+    private String getTsunamiString(boolean onlyTsunamis) {
+        if(onlyTsunamis)
+        {
+            return ", \"properties.tsunami\": {$eq: 1}";
+        }
+        return "";
+    }
+
+    public HashMap<String, LocationData> getLocationDataMap() {
+        return locationDataMap;
+    }
+        
     public boolean verifyCredentials(String email, String password) {
             List<DBUser> userList = getUserList(email);
             if (!userList.isEmpty()) {
@@ -171,4 +271,5 @@ public class DatabaseAccessObject {
             datastore.save(user);
     }
 	
+    
 }
