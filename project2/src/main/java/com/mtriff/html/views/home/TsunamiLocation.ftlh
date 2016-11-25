@@ -1,6 +1,6 @@
 <h2>${Title}.</h2>
 
-<script>var rawData = ${TsunamiData};</script>
+<script>var rawData = ${TsunamiData?no_esc};</script>
 
 <div id="parameters" class="col-md-12">
     <div class="panel panel-default">

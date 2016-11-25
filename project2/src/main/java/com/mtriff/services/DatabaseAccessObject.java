@@ -1,11 +1,18 @@
 package com.mtriff.services;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.jongo.Aggregate;
+import org.jongo.Jongo;
+import org.jongo.MongoCollection;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
@@ -14,27 +21,17 @@ import com.mtriff.models.LocationData;
 import com.mtriff.models.LocationType;
 import com.mtriff.models.MagnitudeAggregateData;
 import com.mtriff.models.MagnitudeLocation;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import org.geojson.Crs;
-import org.geojson.jackson.CrsType;
-import org.jongo.Aggregate;
-import org.jongo.Aggregate.ResultsIterator;
-import org.jongo.Jongo;
-import org.jongo.MongoCollection;
 
 public class DatabaseAccessObject {
 
     private static DatabaseAccessObject dao;
 
     private Datastore datastore;
-    private ObjectMapper objectMapper;
-
     private MongoCollection monthly;
     private MongoCollection location;
     
     private Jongo jongo;
+	private ObjectMapper objectMapper;
     
     private HashMap<String, LocationData> locationDataMap;
     private LocationType currentLocationType = null;
@@ -45,9 +42,8 @@ public class DatabaseAccessObject {
             morphia.mapPackage("com.mtriff.models");
             datastore = morphia.createDatastore(mongo, "earthquakeviz");
 
-            objectMapper = new ObjectMapper();
-
-            DB mb = mongo.getDB("earthquakeviz");
+            @SuppressWarnings("deprecation")
+			DB mb = mongo.getDB("earthquakeviz");
             jongo = new Jongo(mb);
             monthly = jongo.getCollection("monthly");
             
@@ -60,7 +56,50 @@ public class DatabaseAccessObject {
             if (dao == null) dao = new DatabaseAccessObject();
             return dao;
     }
+    
+	private ObjectMapper getObjectMapper() {
+		if (objectMapper == null) objectMapper = new ObjectMapper();
+		return objectMapper;
+	}
 
+    public String getQuakeAggregateDataAsJSON(boolean onlyTsunamis) {
+        Iterator<MagnitudeAggregateData> quakeData = dao.getQuakeAggregateData(onlyTsunamis);
+        StringBuffer jsonQuakeData = new StringBuffer("{ rows: [");
+        int preLoopLength = jsonQuakeData.length();
+        while (quakeData.hasNext()) {
+	    	MagnitudeAggregateData data = quakeData.next();
+	    	if (jsonQuakeData.length() > preLoopLength) {
+	    		jsonQuakeData.append(",");
+	    	}
+	    	try {
+				jsonQuakeData.append(getObjectMapper().writeValueAsString(data));
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+    	}
+        jsonQuakeData.append("] }");
+        return jsonQuakeData.toString();
+    }
+
+    public String getQuakeLocationDataAsJSON(boolean onlyTsunamis) {
+        Iterator<MagnitudeLocation> quakeData = dao.getQuakeData(onlyTsunamis);
+        StringBuffer jsonQuakeData = new StringBuffer("{ rows: [");
+        int preLoopLength = jsonQuakeData.length();
+        while (quakeData.hasNext()) {
+        	MagnitudeLocation data = quakeData.next();
+	    	if (jsonQuakeData.length() > preLoopLength) {
+	    		jsonQuakeData.append(",");
+	    	}
+	    	try {
+				jsonQuakeData.append(getObjectMapper().writeValueAsString(data));
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+    	}
+        jsonQuakeData.append("] }");
+        return jsonQuakeData.toString();
+    }
+        
     public Iterator<MagnitudeLocation> getQuakeData(boolean onlyTsunamis) {
         return getQuakeData(onlyTsunamis, "");
     }
@@ -255,14 +294,13 @@ public class DatabaseAccessObject {
             }
             DBUser user = userList.get(0);
             return user;
-//		return objectMapper.writeValueAsString(user);
     }
 
     private List<DBUser> getUserList(String email) {
             Logger.getAnonymousLogger().info("Getting user with email: " + email);
             List<DBUser> userList = datastore.createQuery(DBUser.class)
-                                                                                    .field("email").equalIgnoreCase(email)
-                                                                                    .asList();
+                .field("email").equalIgnoreCase(email)
+                .asList();
             return userList;
     }
 
@@ -271,5 +309,4 @@ public class DatabaseAccessObject {
             datastore.save(user);
     }
 	
-    
 }

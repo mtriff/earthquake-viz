@@ -8,7 +8,6 @@ package com.mtriff.models;
 import org.jongo.marshall.jackson.oid.MongoId;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.jaxrs.json.annotation.JSONP;
 
 /**
  *

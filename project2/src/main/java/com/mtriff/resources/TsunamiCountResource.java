@@ -24,7 +24,7 @@ public class TsunamiCountResource {
     public String getIndex() {
         Map<String, Object> dataModel = new HashMap<String, Object>();
         dataModel.put("Title", "Global Tsunami Occurrences");
-        dataModel.put("TsunamiData", dao.getQuakeAggregateData(true));
+        dataModel.put("TsunamiData", dao.getQuakeAggregateDataAsJSON(true));
     	return FreemakerConfig.getRenderedTemplate("TsunamiCount", dataModel);
     }
 }
