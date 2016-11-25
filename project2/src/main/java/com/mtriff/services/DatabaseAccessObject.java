@@ -141,10 +141,10 @@ public class DatabaseAccessObject {
                             + "date: {\"$add\": [#, \"$properties.time\"]}}},"
                     + "\"myHourOfDay\": "
                         + "{\"$hour\":{\"$add\": [#, \"$properties.time\"]}},"
-                    + "magnitude: \"$properties.mag\", "
-                    + "\"latitude\": {$arrayElemAt: "
+                    + "Magnitude: \"$properties.mag\", "
+                    + "\"Latitude\": {$arrayElemAt: "
                         + "[\"$geometry.coordinates\",1]}, "
-                    + "\"longitude\": {$arrayElemAt: "
+                    + "\"Longitude\": {$arrayElemAt: "
                         + "[\"$geometry.coordinates\",0]}}}", 
                     theEpoch, theEpoch)
                 .and("{$sort: {\"myDayOfYear\": 1}}")
@@ -211,8 +211,8 @@ public class DatabaseAccessObject {
                     + "{_id: 0, "
                     + "\"myDayOfYear\": \"$_id.myDayOfYear\", "
                     + "\"myHourOfDay\": \"$_id.myHourOfDay\", "
-                    + "\"magnitude\": \"$_id.magnitude\", "
-                    + "count: \"$count\"}}")
+                    + "\"Magnitude\": \"$_id.magnitude\", "
+                    + "Count: \"$count\"}}")
                 .as(MagnitudeAggregateData.class);
         }
         catch (Exception ex)
