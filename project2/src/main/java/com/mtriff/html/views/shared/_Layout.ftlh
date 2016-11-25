@@ -16,7 +16,7 @@
     <script src="js/lodash.js"></script>
     <script src="js/quakecommon.js"></script>
 </head>
-<body>
+<body onload="loadUserSettings()">
     <div class="navbar navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">

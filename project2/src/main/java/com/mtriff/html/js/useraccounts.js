@@ -173,3 +173,68 @@ function loadUserSettings() {
 		showLogoutForm();	
 	}
 }
+
+function saveUserSettings() {
+	var settings = {};
+	settings.aggregateBy = currAggregateBy;
+	settings.timeRangeStart = getDateFromOption(document.getElementById('dropdownMenu1').innerHTML.substring(0, 10));
+	settings.timeRangeEnd = getDateFromOption(document.getElementById('dropdownMenu2').innerHTML.substring(0, 10));
+	var user = JSON.parse(getUserSession());
+	if (location.pathname == "/Magnitude") {
+		user.earthquakeMagnitudeSettings = settings;
+	} else if (location.pathname == "/QuakeLocation") {
+		user.earthquakeLocationSettings = settings;
+	} else if (location.pathname == "/TsunamiCount") {
+		user.tsunamiOccurrenceSettings = settings;
+	} else if (location.pathname == "/TsunamiLocation") {
+		user.tsunamiLocationSettings = settings;
+	}
+	setUserSession(user);
+	saveUser(user);
+}
+
+function loadChartSettings() {
+	var settings = getCurrentChartSettings();
+    if (!settings) return;
+    if (settings.timeRangeStart) {
+    	var startOptions = document.getElementById("rangestart").getElementsByClassName("timeOption");
+    	_.forEach(startOptions, function(option) {
+    		if (option && option.innerHTML == settings.timeRangeStart) {
+    			option.click();
+    		}
+    	});
+    	// loadRangeEnd() will be called by the option click after it loads the 
+    	//  updated options for rangeEnd
+    } else if (settings.timeRangeEnd) {
+    	loadRangeEnd();
+    }
+
+}
+
+function getCurrentChartSettings() {
+	var settings = null;
+	var user = JSON.parse(getUserSession());
+    if (location.pathname == "/Magnitude") {
+    	settings = user.earthquakeMagnitudeSettings;
+    } else if (location.pathname == "/QuakeLocation") {
+    	settings = user.earthquakeLocationSettings;
+    } else if (location.pathname == "/TsunamiCount") {
+    	settings = user.tsunamiOccurrenceSettings;
+    } else if (location.pathname == "/TsunamiLocation") {
+    	settings = user.tsunamiLocationSettings;
+    }
+    return settings;
+}
+
+function loadRangeEnd() {
+	var settings = getCurrentChartSettings();
+    if (!settings) return;
+    if (settings.timeRangeEnd) {
+    	var endOptions = document.getElementById("rangeend").getElementsByClassName("timeOption");
+    	_.forEach(endOptions, function(option) {
+    		if (option.innerHTML == settings.timeRangeEnd) {
+    			option.click();
+    		}
+    	});
+    }
+}

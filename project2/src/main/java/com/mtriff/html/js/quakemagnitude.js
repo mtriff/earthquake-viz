@@ -10,6 +10,9 @@ var currAggregateBy;
 var data
 
 function loadChart(aggregateBy, preserveMenuLabel) {
+	if (getUserSession()) {
+		//saveUserSettings();
+	}
     // Convert dates to format for rendering chart
     // data = [{ "2016-09-20": { 1.0: 2, 2.0:1 } }];
     if (currAggregateBy == aggregateBy) {

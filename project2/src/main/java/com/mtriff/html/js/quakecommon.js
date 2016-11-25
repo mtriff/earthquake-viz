@@ -116,6 +116,13 @@ function setOptionsChangeText(allOptions) {
             // Make the selection visibly persist
             var menuBtn = e.target.parentElement.parentElement.parentElement.getElementsByClassName("btn")[0];
             menuBtn.innerHTML = e.target.innerHTML + "<span class='caret'></span>";
+            // Check if this was called while loading the user settings
+            var dummyError = new Error();
+            if (dummyError.stack.indexOf("useraccounts.js") >= 0) {
+            	if (e.target.parentElement.parentElement.id == "rangestart") {
+            		loadRangeEnd();
+            	}
+            }
             // Re-render chart
             clearChart();
             loadChart(currAggregateBy, true);

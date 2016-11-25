@@ -41,7 +41,7 @@ textarea {
     background: #add8a9;
 }
 
-.nav .open>a, .nav .open>a:focus, .nav .open>a:hover, .nav a.dropdown-toggle:hover{
+.nav .open>a, .nav .open>a:focus, .nav .open>a:hover, .nav a.dropdown-toggle:hover, .nav a.dropdown-toggle:focus{
     background-color: #add8a9
 }
 
