@@ -1,3 +1,6 @@
+// Global variable for accessing the current data set
+var rawData;
+
 function getMagnitudeFillClass(magnitude) {
     var magnitudeInt = parseInt(magnitude);
     if (magnitudeInt < 1) return "mag0";

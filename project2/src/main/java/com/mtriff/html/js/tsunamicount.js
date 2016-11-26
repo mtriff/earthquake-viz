@@ -260,4 +260,4 @@ function getTsunamiCountFillClass(d) {
     if (countInt >= 450) return "tsunami8plus";
 }
 
-document.getElementsByTagName("body")[0].onload = loadChart("QuakeDate");
+document.getElementsByTagName("body")[0].onload = loadTsunamiMagnitudeData();

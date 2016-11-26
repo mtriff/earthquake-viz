@@ -35,22 +35,22 @@ public class MagnitudeLocation {
         this.id = id;
     }
     
-    @JsonProperty("Date")
+    @JsonProperty("QuakeDate")
     public String getDate() {
         return myDayOfYear;
     }
 
-    @JsonProperty("Date")
+    @JsonProperty("QuakeDate")
     public void setDate(String myDayOfYear) {
         this.myDayOfYear = myDayOfYear;
     }
 
-    @JsonProperty("Hour")
+    @JsonProperty("QuakeHour")
     public int getHour() {
         return myHourOfDay;
     }
 
-    @JsonProperty("Hour")
+    @JsonProperty("QuakeHour")
     public void setHour(int myHourOfDay) {
         this.myHourOfDay = myHourOfDay;
     }

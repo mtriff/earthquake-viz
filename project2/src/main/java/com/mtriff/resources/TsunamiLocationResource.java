@@ -24,7 +24,6 @@ public class TsunamiLocationResource {
     public String getIndex() {
         Map<String, Object> dataModel = new HashMap<String, Object>();
         dataModel.put("Title", "Global Potential Tsunamis in Oceanic Regions");
-        dataModel.put("TsunamiData", dao.getQuakeLocationDataAsJSON(true));
     	return FreemakerConfig.getRenderedTemplate("TsunamiLocation", dataModel);
     }
 }

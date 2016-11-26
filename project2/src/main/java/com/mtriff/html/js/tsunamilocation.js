@@ -193,5 +193,5 @@ function clearChart() {
         .remove();
 }
 
-document.getElementsByTagName("body")[0].onload = loadChart("QuakeDate");
+document.getElementsByTagName("body")[0].onload = loadTsunamiLocationData();
 

@@ -1,27 +1,25 @@
 package com.mtriff.models;
 
-import java.sql.Date;
-
 public class Setting {
 	protected String aggregateBy;
-	protected Date timeRangeStart;
-	protected Date timeRangeEnd;
+	protected String timeRangeStart;
+	protected String timeRangeEnd;
 	public String getAggregateBy() {
 		return aggregateBy;
 	}
 	public void setAggregateBy(String aggregateBy) {
 		this.aggregateBy = aggregateBy;
 	}
-	public Date getTimeRangeStart() {
+	public String getTimeRangeStart() {
 		return timeRangeStart;
 	}
-	public void setTimeRangeStart(Date timeRangeStart) {
+	public void setTimeRangeStart(String timeRangeStart) {
 		this.timeRangeStart = timeRangeStart;
 	}
-	public Date getTimeRangeEnd() {
+	public String getTimeRangeEnd() {
 		return timeRangeEnd;
 	}
-	public void setTimeRangeEnd(Date timeRangeEnd) {
+	public void setTimeRangeEnd(String timeRangeEnd) {
 		this.timeRangeEnd = timeRangeEnd;
 	}
 }

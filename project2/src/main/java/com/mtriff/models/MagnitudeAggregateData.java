@@ -62,12 +62,12 @@ public class MagnitudeAggregateData {
         this.magnitude = magnitude;
     }
 
-    @JsonProperty("Count")
+    @JsonProperty("Amount")
     public int getCount() {
         return count;
     }
 
-    @JsonProperty("Count")
+    @JsonProperty("Amount")
     public void setCount(int count) {
         this.count = count;
     }

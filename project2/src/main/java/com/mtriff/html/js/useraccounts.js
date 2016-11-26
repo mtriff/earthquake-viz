@@ -199,7 +199,7 @@ function loadChartSettings() {
     if (settings.timeRangeStart) {
     	var startOptions = document.getElementById("rangestart").getElementsByClassName("timeOption");
     	_.forEach(startOptions, function(option) {
-    		if (option && option.innerHTML == settings.timeRangeStart) {
+    		if (option && option.innerHTML == settings.timeRangeStart.substring(0,10)) {
     			option.click();
     		}
     	});
@@ -214,6 +214,7 @@ function loadChartSettings() {
 function getCurrentChartSettings() {
 	var settings = null;
 	var user = JSON.parse(getUserSession());
+	if (!user) return;
     if (location.pathname == "/Magnitude") {
     	settings = user.earthquakeMagnitudeSettings;
     } else if (location.pathname == "/QuakeLocation") {
@@ -232,9 +233,137 @@ function loadRangeEnd() {
     if (settings.timeRangeEnd) {
     	var endOptions = document.getElementById("rangeend").getElementsByClassName("timeOption");
     	_.forEach(endOptions, function(option) {
-    		if (option.innerHTML == settings.timeRangeEnd) {
+    		if (option.innerHTML == settings.timeRangeEnd.substring(0,10)) {
     			option.click();
     		}
     	});
     }
+}
+
+function loadQuakeMagnitudeData() {
+	loadUserSettings();
+	$.ajax({
+		type: "GET",
+		contentType: "application/json",
+		dataType: "json",
+		url: "/chart-data/quake/magnitude",
+		success: function(result) {
+			rawData = result;
+			loadChart("QuakeDate");
+			loadChartSettings();
+			var origLoadChart = loadChart;
+			loadChart = function(aggregateBy, preserveMenuLabel) {
+				if (getUserSession()) {
+					saveUserSettings();
+				}
+				origLoadChart(aggregateBy, preserveMenuLabel)
+			};
+		},
+		error: function(err) {
+			$.notify({
+				// options
+				message: 'There was retrieving the earthquake data.' 
+			},{
+				// settings
+				type: 'danger'
+			});
+			console.log(err);
+		}
+	});
+}
+
+function loadQuakeLocationData() {
+	loadUserSettings();
+	$.ajax({
+		type: "GET",
+		contentType: "application/json",
+		dataType: "json",
+		url: "/chart-data/quake/location",
+		success: function(result) {
+			rawData = result;
+			loadChart("QuakeDate");
+			loadChartSettings();
+			var origLoadChart = loadChart;
+			loadChart = function(aggregateBy, preserveMenuLabel) {
+				if (getUserSession()) {
+					saveUserSettings();
+				}
+				origLoadChart(aggregateBy, preserveMenuLabel)
+			};
+		},
+		error: function(err) {
+			$.notify({
+				// options
+				message: 'There was retrieving the earthquake data.' 
+			},{
+				// settings
+				type: 'danger'
+			});
+			console.log(err);
+		}
+	});
+}
+
+function loadTsunamiLocationData() {
+	loadUserSettings();
+	$.ajax({
+		type: "GET",
+		contentType: "application/json",
+		dataType: "json",
+		url: "/chart-data/tsunami/location",
+		success: function(result) {
+			rawData = result;
+			loadChart("QuakeDate");
+			loadChartSettings();
+			var origLoadChart = loadChart;
+			loadChart = function(aggregateBy, preserveMenuLabel) {
+				if (getUserSession()) {
+					saveUserSettings();
+				}
+				origLoadChart(aggregateBy, preserveMenuLabel)
+			};
+		},
+		error: function(err) {
+			$.notify({
+				// options
+				message: 'There was retrieving the tsunami data.' 
+			},{
+				// settings
+				type: 'danger'
+			});
+			console.log(err);
+		}
+	});
+}
+
+function loadTsunamiMagnitudeData() {
+	loadUserSettings();
+	$.ajax({
+		type: "GET",
+		contentType: "application/json",
+		dataType: "json",
+		url: "/chart-data/tsunami/magnitude",
+		success: function(result) {
+			rawData = result;
+			loadChart("QuakeDate");
+			loadChartSettings();
+			var origLoadChart = loadChart;
+			loadChart = function(aggregateBy, preserveMenuLabel) {
+				if (getUserSession()) {
+					saveUserSettings();
+				}
+				origLoadChart(aggregateBy, preserveMenuLabel)
+			};
+		},
+		error: function(err) {
+			$.notify({
+				// options
+				message: 'There was retrieving the tsunami data.' 
+			},{
+				// settings
+				type: 'danger'
+			});
+			console.log(err);
+		}
+	});
 }

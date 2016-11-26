@@ -64,7 +64,7 @@ public class DatabaseAccessObject {
 
     public String getQuakeAggregateDataAsJSON(boolean onlyTsunamis) {
         Iterator<MagnitudeAggregateData> quakeData = dao.getQuakeAggregateData(onlyTsunamis);
-        StringBuffer jsonQuakeData = new StringBuffer("{ rows: [");
+        StringBuffer jsonQuakeData = new StringBuffer("{ \"rows\": [");
         int preLoopLength = jsonQuakeData.length();
         while (quakeData.hasNext()) {
 	    	MagnitudeAggregateData data = quakeData.next();
@@ -83,7 +83,7 @@ public class DatabaseAccessObject {
 
     public String getQuakeLocationDataAsJSON(boolean onlyTsunamis) {
         Iterator<MagnitudeLocation> quakeData = dao.getQuakeData(onlyTsunamis);
-        StringBuffer jsonQuakeData = new StringBuffer("{ rows: [");
+        StringBuffer jsonQuakeData = new StringBuffer("{ \"rows\": [");
         int preLoopLength = jsonQuakeData.length();
         while (quakeData.hasNext()) {
         	MagnitudeLocation data = quakeData.next();
@@ -212,7 +212,7 @@ public class DatabaseAccessObject {
                     + "\"myDayOfYear\": \"$_id.myDayOfYear\", "
                     + "\"myHourOfDay\": \"$_id.myHourOfDay\", "
                     + "\"Magnitude\": \"$_id.magnitude\", "
-                    + "Count: \"$count\"}}")
+                    + "Amount: \"$count\"}}")
                 .as(MagnitudeAggregateData.class);
         }
         catch (Exception ex)

@@ -24,8 +24,6 @@ public class MagnitudeResource {
     public String getIndex() {
         Map<String, Object> dataModel = new HashMap<String, Object>();
         dataModel.put("Title", "Global Earthquakes by Magnitude");
-        dataModel.put("QuakeData", dao.getQuakeAggregateDataAsJSON(false));
-        System.out.println(dataModel.get("QuakeData"));
     	return FreemakerConfig.getRenderedTemplate("Magnitude", dataModel);
     }
 }
