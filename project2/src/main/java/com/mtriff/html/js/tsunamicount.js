@@ -70,7 +70,57 @@ function loadChart(aggregateBy, preserveMenuLabel) {
         var newVal = {};
         newVal[prop] = value;
         return newVal;
-    }); 
+    });
+    
+    // Add missing dates in range with a value of 0
+    var sortedDates;
+    var minDate;
+    var minDateDate;
+    var maxDate;
+    var maxDateDate;
+    var workingDate;
+    if (aggregateBy.indexOf("Hour") == -1) {
+        // Aggregate by days
+		sortedDates = _.sortBy(Object.keys(newDates));
+	    minDate = sortedDates[0];
+		minDateDate = new Date(minDate);
+		minDateDate.setHours(24); // Handles different timezones
+	    maxDate = sortedDates[sortedDates.length - 1];
+	    maxDateDate = new Date(maxDate);
+	    maxDateDate.setHours(24); // Handles different timezones
+	    workingDate = new Date(minDate);
+	    workingDate.setHours(24); // Handles different timezones
+	} else {
+		// Hours
+		sortedDates = _.sortBy(Object.keys(newDates), [function(o) { return parseInt(o); }])
+		// Convert hours to dates for comparison
+		minDate = sortedDates[0] + ":";
+		minDateDate = getDateFromOption(minDate);
+	    maxDate = sortedDates[sortedDates.length - 1] + ":";
+	    maxDateDate = getDateFromOption(maxDate);
+	    workingDate = getDateFromOption(minDate);
+	}
+
+    while (workingDate < maxDateDate) {
+    	var workingDateStr;
+    	if (aggregateBy.indexOf("Hour") == -1) {
+            // Aggregate by days
+    		workingDateStr  = workingDate.toISOString().substring(0,10);
+    	} else {
+    		// Hours
+    		workingDateStr = workingDate.getDate() + "";
+    	}
+    	if (!_.includes(sortedDates, workingDateStr)) {
+    		var newDate = {};
+    		newDate[workingDateStr] = 0;
+
+    		// Calculate date difference to get index
+            var insertAtIndex = (workingDate - minDateDate) / (1000*60*60*24);
+            data.splice(insertAtIndex, 0, newDate);
+    	}
+		workingDate.setDate(workingDate.getDate() + 1);
+    }
+    
     renderChart(data, aggregateBy, preserveMenuLabel);
 }
 
