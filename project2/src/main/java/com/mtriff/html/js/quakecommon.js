@@ -200,3 +200,14 @@ function getOptionFromDateString(dateStr) {
 		return dateStr.substring(0,10)
 	}
 }
+
+function filterContinent(e) {
+	// Make the selection visibly persist
+	var menuBtn = e.target.parentElement.parentElement.parentElement.getElementsByClassName("btn")[0];
+	menuBtn.innerHTML = e.target.innerHTML + "  <span class='caret'></span>";
+    if (location.pathname == "/Magnitude") {
+    	loadQuakeMagnitudeData(true);
+    } else if (location.pathname == "/TsunamiCount") {
+    	loadTsunamiMagnitudeData(true);
+    }
+}

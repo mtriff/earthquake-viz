@@ -280,8 +280,8 @@ function getY(data, i, magnitude) {
 
 function showTooltip(d, magnitude) {
     var key = Object.keys(d)[0];
-    document.getElementById('tooltip').innerHTML=d[key][magnitude];
-    if (!d[key][magnitude]) return;
+    document.getElementById('tooltip').innerHTML=d[key];
+    if (!d[key]) return;
     div.transition()
         .style("opacity", 1)
         .style("left", (d3.event.pageX) + "px")

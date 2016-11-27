@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -16,11 +17,13 @@ public class ChartDataResource {
 	
 	@PermitAll
 	@GET
-	@Path("/quake/magnitude")
+	@Path("/quake/magnitude{noop: (/)?}{continent : (continent/[^/]+?)?}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getEarthquakeMagnitudeData() {
-		Logger.getAnonymousLogger().info("Received Quake Magnitude Data Request");
-		return Response.ok(DatabaseAccessObject.getDAO().getQuakeAggregateDataAsJSON(false)).build();
+	public Response getEarthquakeMagnitudeData(@PathParam("continent") String continent) {
+		continent = continent.replaceAll("continent/", "");
+		Logger.getAnonymousLogger().info("Received Quake Magnitude Data Request with continent: " + continent);
+		if (continent.equals("No Filter")) continent = null;
+		return Response.ok(DatabaseAccessObject.getDAO().getQuakeAggregateDataAsJSON(false, continent)).build();
 	}
 	
 	@PermitAll
@@ -34,11 +37,13 @@ public class ChartDataResource {
 	
 	@PermitAll
 	@GET
-	@Path("/tsunami/magnitude")
+	@Path("/tsunami/magnitude{noop: (/)?}{continent : (continent/[^/]+?)?}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getTsunamiMagnitudeData() {
-		Logger.getAnonymousLogger().info("Received Tsunami Magnitude Data Request");
-		return Response.ok(DatabaseAccessObject.getDAO().getQuakeAggregateDataAsJSON(true)).build();
+	public Response getTsunamiMagnitudeData(@PathParam("continent") String continent) {
+		continent = continent.replaceAll("continent/", "");
+		Logger.getAnonymousLogger().info("Received Tsunami Magnitude Data Request with continent: " + continent);
+		if (continent.equals("No Filter")) continent = null;
+		return Response.ok(DatabaseAccessObject.getDAO().getQuakeAggregateDataAsJSON(true, continent)).build();
 	}
 	
 	@PermitAll
@@ -50,4 +55,12 @@ public class ChartDataResource {
 		return Response.ok(DatabaseAccessObject.getDAO().getQuakeLocationDataAsJSON(true)).build();
 	}
 	
+	@PermitAll
+	@GET
+	@Path("/location")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getLocationMapData() {
+		Logger.getAnonymousLogger().info("Received Location Map Data Request");
+		return Response.ok(DatabaseAccessObject.getDAO().getLocationDataMapAsJSON()).build();
+	}
 }

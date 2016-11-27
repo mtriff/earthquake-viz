@@ -62,8 +62,8 @@ public class DatabaseAccessObject {
 		return objectMapper;
 	}
 
-    public String getQuakeAggregateDataAsJSON(boolean onlyTsunamis) {
-        Iterator<MagnitudeAggregateData> quakeData = dao.getQuakeAggregateData(onlyTsunamis);
+    public String getQuakeAggregateDataAsJSON(boolean onlyTsunamis, String locationFilter) {
+        Iterator<MagnitudeAggregateData> quakeData = dao.getQuakeAggregateData(onlyTsunamis, locationFilter);
         StringBuffer jsonQuakeData = new StringBuffer("{ \"rows\": [");
         int preLoopLength = jsonQuakeData.length();
         while (quakeData.hasNext()) {
@@ -170,7 +170,7 @@ public class DatabaseAccessObject {
 
         LocationData la = null;
        
-        if(!continentFilter.isEmpty()) 
+        if(continentFilter != null && !continentFilter.isEmpty()) 
         {
             la = locationDataMap.get(continentFilter);            
         }
@@ -277,6 +277,17 @@ public class DatabaseAccessObject {
 
     public HashMap<String, LocationData> getLocationDataMap() {
         return locationDataMap;
+    }
+    
+    public String getLocationDataMapAsJSON() {
+        try {
+        	Logger.getAnonymousLogger().info("Location data map is size: " + locationDataMap.values().size());
+        	Logger.getAnonymousLogger().info(locationDataMap.toString());
+			return getObjectMapper().writeValueAsString(locationDataMap);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+        return null;
     }
         
     public boolean verifyCredentials(String email, String password) {

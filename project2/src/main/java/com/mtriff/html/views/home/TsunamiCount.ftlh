@@ -36,6 +36,25 @@
         <ul id="rangeend" class="dropdown-menu timemenu" aria-labelledby="dropdownMenu2">
         </ul>
         </div>
+        
+        <br><br>
+        <p>Filter by Continent</p>
+        
+        <div class="dropdown col-xs-6">
+        <button class="btn btn-default dropdown-toggle" type="button" id="continentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            No Filter
+            <span class="caret"></span>
+        </button>
+        <ul id="continentmenu" class="dropdown-menu continentmenu" aria-labelledby="continentDropdown">
+        	<li onclick="filterContinent(event)"><a href="#">No Filter</a></li>
+        	<li onclick="filterContinent(event)"><a href="#">North America</a></li>
+        	<li onclick="filterContinent(event)"><a href="#">South America</a></li>
+        	<li onclick="filterContinent(event)"><a href="#">Europe</a></li>
+        	<li onclick="filterContinent(event)"><a href="#">Africa</a></li>
+        	<li onclick="filterContinent(event)"><a href="#">Asia</a></li>
+        	<li onclick="filterContinent(event)"><a href="#">Australia</a></li>
+        	<li onclick="filterContinent(event)"><a href="#">Oceania</a></li>
+        </div>
     </div>
     </div>
 </div>

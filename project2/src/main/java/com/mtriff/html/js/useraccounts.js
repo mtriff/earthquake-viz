@@ -182,12 +182,24 @@ function saveUserSettings(settings) {
 	settings.timeRangeEnd = getDateFromOption(document.getElementById('dropdownMenu2').innerHTML.substring(0, 10));
 	var user = JSON.parse(getUserSession());
 	if (location.pathname == "/Magnitude") {
+		var continentDropdown = document.getElementById("continentDropdown").innerHTML;
+		var continentFilter = continentDropdown.replace("<span class=\"caret\"></span>", "").trim();
+		if (continentFilter != "No Filter") settings.location = continentFilter; 
 		user.earthquakeMagnitudeSettings = settings;
 	} else if (location.pathname == "/QuakeLocation") {
+		var magnitudeDropdown = document.getElementById("magnitudeDropdown").innerHTML;
+		var magnitudeFilter = magnitudeDropdown.replace("<span class=\"caret\"></span>", "").trim();
+		if (magnitudeFilter != "No Filter") settings.magnitude = magnitudeFilter;
 		user.earthquakeLocationSettings = settings;
 	} else if (location.pathname == "/TsunamiCount") {
+		var continentDropdown = document.getElementById("continentDropdown").innerHTML;
+		var continentFilter = continentDropdown.replace("<span class=\"caret\"></span>", "").trim();
+		if (continentFilter != "No Filter") settings.location = continentFilter; 
 		user.tsunamiOccurrenceSettings = settings;
 	} else if (location.pathname == "/TsunamiLocation") {
+		var magnitudeDropdown = document.getElementById("magnitudeDropdown").innerHTML;
+		var magnitudeFilter = magnitudeDropdown.replace("<span class=\"caret\"></span>", "").trim();
+		if (magnitudeFilter != "No Filter") settings.magnitude = magnitudeFilter;
 		user.tsunamiLocationSettings = settings;
 	}
 	setUserSession(user);
@@ -212,7 +224,30 @@ function loadChartSettings() {
     } else if (settings.timeRangeEnd) {
     	loadRangeEnd();
     }
-
+    if (settings.location) {
+    	var continentDropdown = document.getElementById("continentDropdown").innerHTML;
+    	if (continentDropdown.indexOf(settings.location) == -1) {
+        	var locationOptions = document.getElementById("continentmenu").getElementsByTagName("li");
+        	_.forEach(locationOptions, function(option) {
+        		var anchor = option.getElementsByTagName("a")[0];
+        		if (anchor && anchor.innerHTML == settings.location) {
+        			anchor.click();
+        		}
+        	});
+    	}
+    }
+    if (settings.magnitude) {
+    	var magnitudeDropdown = document.getElementById("magnitudeDropdown").innerHTML;
+    	if (magnitudeDropdown.indexOf(settings.magnitude) == -1) {
+        	var magnitudeOptions = document.getElementById("magnitudemenu").getElementsByTagName("li");
+        	_.forEach(magnitudeOptions, function(option) {
+        		var anchor = option.getElementsByTagName("a")[0];
+        		if (anchor && anchor.innerHTML == settings.magnitude) {
+        			anchor.click();
+        		}
+        	});
+    	}
+    }
 }
 
 function getCurrentChartSettings() {
@@ -244,24 +279,31 @@ function loadRangeEnd() {
     }
 }
 
-function loadQuakeMagnitudeData() {
-	loadUserSettings();
+function loadQuakeMagnitudeData(blockLoadUserSettings) {
+	if (!blockLoadUserSettings) loadUserSettings();
+	var getURL = "/chart-data/quake/magnitude";
+	var continentDropdown = document.getElementById("continentDropdown").innerHTML;
+	var continentFilter = continentDropdown.replace("<span class=\"caret\"></span>", "").trim();
+	if (continentFilter != "No Filter") getURL += "/continent/" + continentFilter;
 	$.ajax({
 		type: "GET",
 		contentType: "application/json",
 		dataType: "json",
-		url: "/chart-data/quake/magnitude",
+		url: getURL,
 		success: function(result) {
 			rawData = result;
+			clearChart();
 			loadChart("QuakeDate");
 			loadChartSettings();
-			var origLoadChart = loadChart;
-			loadChart = function(aggregateBy, preserveMenuLabel) {
-				origLoadChart(aggregateBy, preserveMenuLabel)
-				if (getUserSession()) {
-					saveUserSettings();
-				}
-			};
+			if (loadChart.toString().indexOf("function loadChart") != -1) {
+				var origLoadChart = loadChart;
+				loadChart = function(aggregateBy, preserveMenuLabel) {
+					origLoadChart(aggregateBy, preserveMenuLabel)
+					if (getUserSession()) {
+						saveUserSettings();
+					}
+				};	
+			}
 		},
 		error: function(err) {
 			$.notify({
@@ -342,24 +384,31 @@ function loadTsunamiLocationData() {
 	});
 }
 
-function loadTsunamiMagnitudeData() {
-	loadUserSettings();
+function loadTsunamiMagnitudeData(blockLoadUserSettings) {
+	if (!blockLoadUserSettings) loadUserSettings();
+	var getURL = "/chart-data/tsunami/magnitude";
+	var continentDropdown = document.getElementById("continentDropdown").innerHTML;
+	var continentFilter = continentDropdown.replace("<span class=\"caret\"></span>", "").trim();
+	if (continentFilter != "No Filter") getURL += "/continent/" + continentFilter;
 	$.ajax({
 		type: "GET",
 		contentType: "application/json",
 		dataType: "json",
-		url: "/chart-data/tsunami/magnitude",
+		url: getURL,
 		success: function(result) {
 			rawData = result;
+			clearChart();
 			loadChart("QuakeDate");
 			loadChartSettings();
-			var origLoadChart = loadChart;
-			loadChart = function(aggregateBy, preserveMenuLabel) {
-				origLoadChart(aggregateBy, preserveMenuLabel)
-				if (getUserSession()) {
-					saveUserSettings();
-				}
-			};
+			if (loadChart.toString().indexOf("function loadChart") != -1) {
+				var origLoadChart = loadChart;
+				loadChart = function(aggregateBy, preserveMenuLabel) {
+					origLoadChart(aggregateBy, preserveMenuLabel)
+					if (getUserSession()) {
+						saveUserSettings();
+					}
+				};	
+			}
 		},
 		error: function(err) {
 			$.notify({
