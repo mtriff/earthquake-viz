@@ -38,9 +38,20 @@ function loadChart(aggregateBy, preserveMenuLabel) {
         }
     }
     
+    var filteredRows = rawData.rows; 
+    
+    var magnitudeFilter = parseInt(document.getElementById("magnitudeDropdown").innerHTML);
+    if (magnitudeFilter) {
+    	if (magnitudeFilter < 8) {
+        	filteredRows = _.filter(rawData.rows, function(o) { return (o.Magnitude >= magnitudeFilter && o.Magnitude < (magnitudeFilter + 1)); });
+    	} else {
+        	filteredRows = _.filter(rawData.rows, function(o) { return o.Magnitude > magnitudeFilter; });
+    	}
+    }
+    
     var datesForOptions = [];
     var dataToMap = []
-    _.forEach(rawData.rows, function(value) {
+    _.forEach(filteredRows, function(value) {
         var keyTime;
         if (aggregateBy.indexOf("Date") != -1) {
             keyTime = new Date(value[aggregateBy]);

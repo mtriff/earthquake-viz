@@ -282,6 +282,7 @@ function loadQuakeLocationData() {
 		success: function(result) {
 			rawData = result;
 			loadChart("QuakeDate");
+			setMagnitudeOptions();
 			loadChartSettings();
 			var origLoadChart = loadChart;
 			loadChart = function(aggregateBy, preserveMenuLabel) {
@@ -314,6 +315,7 @@ function loadTsunamiLocationData() {
 		success: function(result) {
 			rawData = result;
 			loadChart("QuakeDate");
+			setMagnitudeOptions();
 			loadChartSettings();
 			var origLoadChart = loadChart;
 			loadChart = function(aggregateBy, preserveMenuLabel) {

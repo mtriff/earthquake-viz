@@ -16,7 +16,7 @@
 
         <br>
         <hr>
-
+		<br>
         <p>Time Range</p>
 
         <div class="dropdown col-xs-6">
@@ -34,6 +34,17 @@
             <span class="caret"></span>
         </button>
         <ul id="rangeend" class="dropdown-menu timemenu" aria-labelledby="dropdownMenu2">
+        </ul>
+        </div>
+        <br><br>
+        <p>Filter by Magnitude</p>
+        
+        <div class="dropdown col-xs-6">
+        <button class="btn btn-default dropdown-toggle" type="button" id="magnitudeDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            No Filter
+            <span class="caret"></span>
+        </button>
+        <ul id="magnitudemenu" class="dropdown-menu magnitudemenu" aria-labelledby="magnitudeDropdown">
         </ul>
         </div>
     </div>
