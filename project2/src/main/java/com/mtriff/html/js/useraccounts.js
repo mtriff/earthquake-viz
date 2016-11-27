@@ -76,6 +76,7 @@ function loginUser() {
 	$.ajax({
 		type: "GET",
 		contentType: "application/json",
+		dataType: "json",
 		url: "/users/login",
 		headers: {
 			  "Authorization": auth
@@ -174,7 +175,7 @@ function loadUserSettings() {
 	}
 }
 
-function saveUserSettings() {
+function saveUserSettings(settings) {
 	var settings = {};
 	settings.aggregateBy = currAggregateBy;
 	settings.timeRangeStart = getDateFromOption(document.getElementById('dropdownMenu1').innerHTML.substring(0, 10));
@@ -196,11 +197,14 @@ function saveUserSettings() {
 function loadChartSettings() {
 	var settings = getCurrentChartSettings();
     if (!settings) return;
+    if (settings.aggregateBy == "QuakeHour") {
+    	document.querySelector(".aggregateBy:not(active)").click();
+    }
     if (settings.timeRangeStart) {
     	var startOptions = document.getElementById("rangestart").getElementsByClassName("timeOption");
     	_.forEach(startOptions, function(option) {
-    		if (option && option.innerHTML == settings.timeRangeStart.substring(0,10)) {
-    			option.click();
+    		if (option && option.innerHTML == getOptionFromDateString(settings.timeRangeStart)) {
+				option.click();
     		}
     	});
     	// loadRangeEnd() will be called by the option click after it loads the 
@@ -233,7 +237,7 @@ function loadRangeEnd() {
     if (settings.timeRangeEnd) {
     	var endOptions = document.getElementById("rangeend").getElementsByClassName("timeOption");
     	_.forEach(endOptions, function(option) {
-    		if (option.innerHTML == settings.timeRangeEnd.substring(0,10)) {
+    		if (option.innerHTML == getOptionFromDateString(settings.timeRangeEnd)) {
     			option.click();
     		}
     	});
@@ -253,10 +257,10 @@ function loadQuakeMagnitudeData() {
 			loadChartSettings();
 			var origLoadChart = loadChart;
 			loadChart = function(aggregateBy, preserveMenuLabel) {
+				origLoadChart(aggregateBy, preserveMenuLabel)
 				if (getUserSession()) {
 					saveUserSettings();
 				}
-				origLoadChart(aggregateBy, preserveMenuLabel)
 			};
 		},
 		error: function(err) {
@@ -286,10 +290,10 @@ function loadQuakeLocationData() {
 			loadChartSettings();
 			var origLoadChart = loadChart;
 			loadChart = function(aggregateBy, preserveMenuLabel) {
+				origLoadChart(aggregateBy, preserveMenuLabel)
 				if (getUserSession()) {
 					saveUserSettings();
 				}
-				origLoadChart(aggregateBy, preserveMenuLabel)
 			};
 		},
 		error: function(err) {
@@ -319,10 +323,10 @@ function loadTsunamiLocationData() {
 			loadChartSettings();
 			var origLoadChart = loadChart;
 			loadChart = function(aggregateBy, preserveMenuLabel) {
+				origLoadChart(aggregateBy, preserveMenuLabel)
 				if (getUserSession()) {
 					saveUserSettings();
 				}
-				origLoadChart(aggregateBy, preserveMenuLabel)
 			};
 		},
 		error: function(err) {
@@ -351,10 +355,10 @@ function loadTsunamiMagnitudeData() {
 			loadChartSettings();
 			var origLoadChart = loadChart;
 			loadChart = function(aggregateBy, preserveMenuLabel) {
+				origLoadChart(aggregateBy, preserveMenuLabel)
 				if (getUserSession()) {
 					saveUserSettings();
 				}
-				origLoadChart(aggregateBy, preserveMenuLabel)
 			};
 		},
 		error: function(err) {

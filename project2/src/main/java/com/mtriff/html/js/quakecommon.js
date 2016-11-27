@@ -191,3 +191,12 @@ function getDateFromOption(timeStr) {
 	}
 	return time;
 }
+
+function getOptionFromDateString(dateStr) {
+	if (dateStr.indexOf("2000") == 0) {
+		// Hours
+		return dateStr.substring(8, 10) + ":00";
+	} else {
+		return dateStr.substring(0,10)
+	}
+}
