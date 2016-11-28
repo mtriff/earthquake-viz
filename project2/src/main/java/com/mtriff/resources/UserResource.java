@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -33,7 +32,7 @@ public class UserResource {
 	
 	@SuppressWarnings("deprecation")
 	@RolesAllowed("USER")
-	@GET @Path("login")
+	@POST @Path("login")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response loginUser(ContainerRequestContext requestContext) {
 		Logger.getAnonymousLogger().info("Received successful login request");

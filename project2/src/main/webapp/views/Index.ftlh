@@ -1,5 +1,7 @@
+<h2>${Title}.</h2>
+
 <div class="splashimage">
-    <img src="images/earthquakeviz.PNG" alt="Earthquake!" class="displayed"/>
+    <img src="static/images/earthquakeviz.PNG" alt="Earthquake!" class="displayed"/>
 </div>
 
 <div class="row">

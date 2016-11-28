@@ -16,7 +16,7 @@
 
         <br>
         <hr>
-		<br>
+
         <p>Time Range</p>
 
         <div class="dropdown col-xs-6">
@@ -36,6 +36,7 @@
         <ul id="rangeend" class="dropdown-menu timemenu" aria-labelledby="dropdownMenu2">
         </ul>
         </div>
+        
         <br><br>
         <p>Filter by Magnitude</p>
         
@@ -45,8 +46,6 @@
             <span class="caret"></span>
         </button>
         <ul id="magnitudemenu" class="dropdown-menu magnitudemenu" aria-labelledby="magnitudeDropdown">
-        </ul>
-        </div>
     </div>
     </div>
 </div>
@@ -61,5 +60,5 @@
 
 <hr>
 
-<script src="js/topojson.min.js"></script>
-<script src="js/tsunamilocation.js"></script>
+<script src="static/js/topojson.min.js"></script>
+<script src="static/js/quakelocation.js"></script>

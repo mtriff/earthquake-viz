@@ -6,15 +6,15 @@
     <title>${Title} - EarthquakeViz</title>
 
     <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/site.css" />
+    <link rel="stylesheet" href="static/css/site.css" />
 
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.3.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"></script>
-    <script src="js/bootstrap-notify.js"></script>
-    <script src="js/useraccounts.js"></script>
-    <script src="js/d3.min.js"></script>
-    <script src="js/lodash.js"></script>
-    <script src="js/quakecommon.js"></script>
+    <script src="static/js/bootstrap-notify.js"></script>
+    <script src="static/js/useraccounts.js"></script>
+    <script src="static/js/d3.min.js"></script>
+    <script src="static/js/lodash.js"></script>
+    <script src="static/js/quakecommon.js"></script>
 </head>
 <body onload="loadUserSettings()">
     <div class="navbar navbar-fixed-top">

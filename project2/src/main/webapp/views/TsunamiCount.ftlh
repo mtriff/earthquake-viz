@@ -69,5 +69,5 @@
 
 <hr>
 
-<script src="js/tsunamicount.js"></script>
+<script src="static/js/tsunamicount.js"></script>
 

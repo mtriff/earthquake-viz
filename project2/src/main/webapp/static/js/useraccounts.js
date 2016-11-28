@@ -38,7 +38,7 @@ function registerUser() {
 	$.ajax({
 		type: "POST",
 		contentType: "application/json",
-		url: "/users/create",
+		url: "users/create",
 		dataType: "json",
 		data: JSON.stringify(newUser),
 		success: function(result) {
@@ -74,10 +74,10 @@ function loginUser() {
 	var password = document.getElementById("password-login").value;
 	var auth = "Basic " + btoa(email + ":" + password);
 	$.ajax({
-		type: "GET",
+		type: "POST",
 		contentType: "application/json",
 		dataType: "json",
-		url: "/users/login",
+		url: "users/login",
 		headers: {
 			  "Authorization": auth
 		},
@@ -112,7 +112,7 @@ function saveUser() {
 	$.ajax({
 		type: "PUT",
 		contentType: "application/json",
-		url: "/users/update",
+		url: "users/update",
 		dataType: "json",
 		data: sessionStorage.getItem("user"),
 		headers: {
@@ -281,7 +281,7 @@ function loadRangeEnd() {
 
 function loadQuakeMagnitudeData(blockLoadUserSettings) {
 	if (!blockLoadUserSettings) loadUserSettings();
-	var getURL = "/chart-data/quake/magnitude";
+	var getURL = "chart-data/quake/magnitude";
 	var continentDropdown = document.getElementById("continentDropdown").innerHTML;
 	var continentFilter = continentDropdown.replace("<span class=\"caret\"></span>", "").trim();
 	if (continentFilter != "No Filter") getURL += "/continent/" + continentFilter;
@@ -324,7 +324,7 @@ function loadQuakeLocationData() {
 		type: "GET",
 		contentType: "application/json",
 		dataType: "json",
-		url: "/chart-data/quake/location",
+		url: "chart-data/quake/location",
 		success: function(result) {
 			rawData = result;
 			loadChart("QuakeDate");
@@ -357,7 +357,7 @@ function loadTsunamiLocationData() {
 		type: "GET",
 		contentType: "application/json",
 		dataType: "json",
-		url: "/chart-data/tsunami/location",
+		url: "chart-data/tsunami/location",
 		success: function(result) {
 			rawData = result;
 			loadChart("QuakeDate");
@@ -386,7 +386,7 @@ function loadTsunamiLocationData() {
 
 function loadTsunamiMagnitudeData(blockLoadUserSettings) {
 	if (!blockLoadUserSettings) loadUserSettings();
-	var getURL = "/chart-data/tsunami/magnitude";
+	var getURL = "chart-data/tsunami/magnitude";
 	var continentDropdown = document.getElementById("continentDropdown").innerHTML;
 	var continentFilter = continentDropdown.replace("<span class=\"caret\"></span>", "").trim();
 	if (continentFilter != "No Filter") getURL += "/continent/" + continentFilter;

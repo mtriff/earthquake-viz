@@ -16,7 +16,7 @@
 
         <br>
         <hr>
-
+		<br>
         <p>Time Range</p>
 
         <div class="dropdown col-xs-6">
@@ -36,24 +36,16 @@
         <ul id="rangeend" class="dropdown-menu timemenu" aria-labelledby="dropdownMenu2">
         </ul>
         </div>
-        
         <br><br>
-        <p>Filter by Continent</p>
+        <p>Filter by Magnitude</p>
         
         <div class="dropdown col-xs-6">
-        <button class="btn btn-default dropdown-toggle" type="button" id="continentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        <button class="btn btn-default dropdown-toggle" type="button" id="magnitudeDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
             No Filter
             <span class="caret"></span>
         </button>
-        <ul id="continentmenu" class="dropdown-menu continentmenu" aria-labelledby="continentDropdown">
-        	<li onclick="filterContinent(event)"><a href="#">No Filter</a></li>
-        	<li onclick="filterContinent(event)"><a href="#">North America</a></li>
-        	<li onclick="filterContinent(event)"><a href="#">South America</a></li>
-        	<li onclick="filterContinent(event)"><a href="#">Europe</a></li>
-        	<li onclick="filterContinent(event)"><a href="#">Africa</a></li>
-        	<li onclick="filterContinent(event)"><a href="#">Asia</a></li>
-        	<li onclick="filterContinent(event)"><a href="#">Australia</a></li>
-        	<li onclick="filterContinent(event)"><a href="#">Oceania</a></li>
+        <ul id="magnitudemenu" class="dropdown-menu magnitudemenu" aria-labelledby="magnitudeDropdown">
+        </ul>
         </div>
     </div>
     </div>
@@ -66,6 +58,8 @@
     <svg class="chart"></svg>
 </div>
 
+
 <hr>
 
-<script src="js/quakemagnitude.js"></script>
+<script src="static/js/topojson.min.js"></script>
+<script src="static/js/tsunamilocation.js"></script>

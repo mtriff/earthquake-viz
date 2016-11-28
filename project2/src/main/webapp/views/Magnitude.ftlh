@@ -38,14 +38,23 @@
         </div>
         
         <br><br>
-        <p>Filter by Magnitude</p>
+        <p>Filter by Continent</p>
         
         <div class="dropdown col-xs-6">
-        <button class="btn btn-default dropdown-toggle" type="button" id="magnitudeDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        <button class="btn btn-default dropdown-toggle" type="button" id="continentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
             No Filter
             <span class="caret"></span>
         </button>
-        <ul id="magnitudemenu" class="dropdown-menu magnitudemenu" aria-labelledby="magnitudeDropdown">
+        <ul id="continentmenu" class="dropdown-menu continentmenu" aria-labelledby="continentDropdown">
+        	<li onclick="filterContinent(event)"><a href="#">No Filter</a></li>
+        	<li onclick="filterContinent(event)"><a href="#">North America</a></li>
+        	<li onclick="filterContinent(event)"><a href="#">South America</a></li>
+        	<li onclick="filterContinent(event)"><a href="#">Europe</a></li>
+        	<li onclick="filterContinent(event)"><a href="#">Africa</a></li>
+        	<li onclick="filterContinent(event)"><a href="#">Asia</a></li>
+        	<li onclick="filterContinent(event)"><a href="#">Australia</a></li>
+        	<li onclick="filterContinent(event)"><a href="#">Oceania</a></li>
+        </div>
     </div>
     </div>
 </div>
@@ -57,8 +66,6 @@
     <svg class="chart"></svg>
 </div>
 
-
 <hr>
 
-<script src="js/topojson.min.js"></script>
-<script src="js/quakelocation.js"></script>
+<script src="static/js/quakemagnitude.js"></script>
