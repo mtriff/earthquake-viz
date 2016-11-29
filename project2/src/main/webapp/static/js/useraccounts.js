@@ -311,7 +311,7 @@ function loadQuakeMagnitudeData(blockLoadUserSettings) {
 			clearChart();
 			var settings = getCurrentChartSettings();
 			var aggregateBy = "QuakeDate";
-			if (settings.aggregateBy) aggregateBy = settings.aggregateBy;
+			if (settings && settings.aggregateBy) aggregateBy = settings.aggregateBy;
 			loadChart(aggregateBy);
 			loadChartSettings();
 			if (loadChart.toString().indexOf("function loadChart") != -1) {
@@ -348,7 +348,7 @@ function loadQuakeLocationData() {
 			rawData = result;
 			var settings = getCurrentChartSettings();
 			var aggregateBy = "QuakeDate";
-			if (settings.aggregateBy) aggregateBy = settings.aggregateBy;
+			if (settings && settings.aggregateBy) aggregateBy = settings.aggregateBy;
 			loadChart(aggregateBy);
 			setMagnitudeOptions();
 			loadChartSettings();
@@ -384,7 +384,7 @@ function loadTsunamiLocationData() {
 			rawData = result;
 			var settings = getCurrentChartSettings();
 			var aggregateBy = "QuakeDate";
-			if (settings.aggregateBy) aggregateBy = settings.aggregateBy;
+			if (settings && settings.aggregateBy) aggregateBy = settings.aggregateBy;
 			loadChart(aggregateBy);
 			setMagnitudeOptions();
 			loadChartSettings();
@@ -425,7 +425,7 @@ function loadTsunamiMagnitudeData(blockLoadUserSettings) {
 			clearChart();
 			var settings = getCurrentChartSettings();
 			var aggregateBy = "QuakeDate";
-			if (settings.aggregateBy) aggregateBy = settings.aggregateBy;
+			if (settings && settings.aggregateBy) aggregateBy = settings.aggregateBy;
 			loadChart(aggregateBy);
 			loadChartSettings();
 			if (loadChart.toString().indexOf("function loadChart") != -1) {
