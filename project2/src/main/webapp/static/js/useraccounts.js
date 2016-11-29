@@ -181,25 +181,41 @@ function saveUserSettings(settings) {
 	settings.timeRangeStart = getDateFromOption(document.getElementById('dropdownMenu1').innerHTML.substring(0, 10));
 	settings.timeRangeEnd = getDateFromOption(document.getElementById('dropdownMenu2').innerHTML.substring(0, 10));
 	var user = JSON.parse(getUserSession());
-	if (location.pathname == "/Magnitude") {
+	if (location.pathname == "/earthquake-viz/Magnitude") {
 		var continentDropdown = document.getElementById("continentDropdown").innerHTML;
 		var continentFilter = continentDropdown.replace("<span class=\"caret\"></span>", "").trim();
-		if (continentFilter != "No Filter") settings.location = continentFilter; 
+		if (continentFilter != "No Filter") {
+			settings.location = continentFilter; 
+		} else {
+			settings.location = null;
+		}
 		user.earthquakeMagnitudeSettings = settings;
-	} else if (location.pathname == "/QuakeLocation") {
+	} else if (location.pathname == "/earthquake-viz/QuakeLocation") {
 		var magnitudeDropdown = document.getElementById("magnitudeDropdown").innerHTML;
 		var magnitudeFilter = magnitudeDropdown.replace("<span class=\"caret\"></span>", "").trim();
-		if (magnitudeFilter != "No Filter") settings.magnitude = magnitudeFilter;
+		if (magnitudeFilter != "No Filter") {
+			settings.magnitude = magnitudeFilter;
+		} else {
+			settings.magnitude = null;
+		}
 		user.earthquakeLocationSettings = settings;
-	} else if (location.pathname == "/TsunamiCount") {
+	} else if (location.pathname == "/earthquake-viz/TsunamiCount") {
 		var continentDropdown = document.getElementById("continentDropdown").innerHTML;
 		var continentFilter = continentDropdown.replace("<span class=\"caret\"></span>", "").trim();
-		if (continentFilter != "No Filter") settings.location = continentFilter; 
+		if (continentFilter != "No Filter") {
+			settings.location = continentFilter; 
+		} else {
+			settings.location = null;
+		}
 		user.tsunamiOccurrenceSettings = settings;
-	} else if (location.pathname == "/TsunamiLocation") {
+	} else if (location.pathname == "/earthquake-viz/TsunamiLocation") {
 		var magnitudeDropdown = document.getElementById("magnitudeDropdown").innerHTML;
 		var magnitudeFilter = magnitudeDropdown.replace("<span class=\"caret\"></span>", "").trim();
-		if (magnitudeFilter != "No Filter") settings.magnitude = magnitudeFilter;
+		if (magnitudeFilter != "No Filter") {
+			settings.magnitude = magnitudeFilter;
+		} else {
+			settings.magnitude = null;
+		}
 		user.tsunamiLocationSettings = settings;
 	}
 	setUserSession(user);
@@ -254,13 +270,13 @@ function getCurrentChartSettings() {
 	var settings = null;
 	var user = JSON.parse(getUserSession());
 	if (!user) return;
-    if (location.pathname == "/Magnitude") {
+    if (location.pathname == "/earthquake-viz/Magnitude") {
     	settings = user.earthquakeMagnitudeSettings;
-    } else if (location.pathname == "/QuakeLocation") {
+    } else if (location.pathname == "/earthquake-viz/QuakeLocation") {
     	settings = user.earthquakeLocationSettings;
-    } else if (location.pathname == "/TsunamiCount") {
+    } else if (location.pathname == "/earthquake-viz/TsunamiCount") {
     	settings = user.tsunamiOccurrenceSettings;
-    } else if (location.pathname == "/TsunamiLocation") {
+    } else if (location.pathname == "/earthquake-viz/TsunamiLocation") {
     	settings = user.tsunamiLocationSettings;
     }
     return settings;
@@ -293,7 +309,10 @@ function loadQuakeMagnitudeData(blockLoadUserSettings) {
 		success: function(result) {
 			rawData = result;
 			clearChart();
-			loadChart("QuakeDate");
+			var settings = getCurrentChartSettings();
+			var aggregateBy = "QuakeDate";
+			if (settings.aggregateBy) aggregateBy = settings.aggregateBy;
+			loadChart(aggregateBy);
 			loadChartSettings();
 			if (loadChart.toString().indexOf("function loadChart") != -1) {
 				var origLoadChart = loadChart;
@@ -327,7 +346,10 @@ function loadQuakeLocationData() {
 		url: "chart-data/quake/location",
 		success: function(result) {
 			rawData = result;
-			loadChart("QuakeDate");
+			var settings = getCurrentChartSettings();
+			var aggregateBy = "QuakeDate";
+			if (settings.aggregateBy) aggregateBy = settings.aggregateBy;
+			loadChart(aggregateBy);
 			setMagnitudeOptions();
 			loadChartSettings();
 			var origLoadChart = loadChart;
@@ -360,7 +382,10 @@ function loadTsunamiLocationData() {
 		url: "chart-data/tsunami/location",
 		success: function(result) {
 			rawData = result;
-			loadChart("QuakeDate");
+			var settings = getCurrentChartSettings();
+			var aggregateBy = "QuakeDate";
+			if (settings.aggregateBy) aggregateBy = settings.aggregateBy;
+			loadChart(aggregateBy);
 			setMagnitudeOptions();
 			loadChartSettings();
 			var origLoadChart = loadChart;
@@ -398,7 +423,10 @@ function loadTsunamiMagnitudeData(blockLoadUserSettings) {
 		success: function(result) {
 			rawData = result;
 			clearChart();
-			loadChart("QuakeDate");
+			var settings = getCurrentChartSettings();
+			var aggregateBy = "QuakeDate";
+			if (settings.aggregateBy) aggregateBy = settings.aggregateBy;
+			loadChart(aggregateBy);
 			loadChartSettings();
 			if (loadChart.toString().indexOf("function loadChart") != -1) {
 				var origLoadChart = loadChart;

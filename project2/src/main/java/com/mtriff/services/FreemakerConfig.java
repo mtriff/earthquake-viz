@@ -1,4 +1,4 @@
-package com.mtriff.resources;
+package com.mtriff.services;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -40,6 +40,7 @@ public class FreemakerConfig {
 			// Don't log exceptions inside FreeMarker that it will thrown at you anyway:
 			configuration.setLogTemplateExceptions(false);
 			
+			// Load in the templates
 			StringTemplateLoader stringLoader = new StringTemplateLoader();
 			   stringLoader.putTemplate("Index", IOUtils.toString(servletContext.getResourceAsStream("/views/Index.ftlh"), "UTF-8"));
 			   stringLoader.putTemplate("Magnitude", IOUtils.toString(servletContext.getResourceAsStream("/views/Magnitude.ftlh"), "UTF-8"));
@@ -54,7 +55,7 @@ public class FreemakerConfig {
 	
 	public static String getRenderedTemplate(ServletContext servletContext, String templateName, Map<String, Object> model) {
 		try {
-			Logger.getAnonymousLogger().info(System.getProperty("user.dir"));
+			Logger.getAnonymousLogger().info("Loading template " + templateName);
 			model.put("RenderBody", templateName);
 			StringWriter writer = new StringWriter();
 			Configuration config = getConfig(servletContext);

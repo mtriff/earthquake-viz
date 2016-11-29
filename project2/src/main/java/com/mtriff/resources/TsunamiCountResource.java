@@ -11,6 +11,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.mtriff.services.DatabaseAccessObject;
+import com.mtriff.services.FreemakerConfig;
 
 @Path("TsunamiCount")
 public class TsunamiCountResource {

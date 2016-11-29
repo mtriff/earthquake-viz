@@ -205,9 +205,9 @@ function filterContinent(e) {
 	// Make the selection visibly persist
 	var menuBtn = e.target.parentElement.parentElement.parentElement.getElementsByClassName("btn")[0];
 	menuBtn.innerHTML = e.target.innerHTML + "  <span class='caret'></span>";
-    if (location.pathname == "/Magnitude") {
+    if (location.pathname == "/earthquake-viz/Magnitude") {
     	loadQuakeMagnitudeData(true);
-    } else if (location.pathname == "/TsunamiCount") {
+    } else if (location.pathname == "/earthquake-viz/TsunamiCount") {
     	loadTsunamiMagnitudeData(true);
     }
 }

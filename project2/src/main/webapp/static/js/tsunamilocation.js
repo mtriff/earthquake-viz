@@ -114,7 +114,7 @@ function renderChart(data, aggregateBy) {
         .scaleExtent([1 / 2, 4])
         .on("zoom", zoomed));
 
-    d3.json("/data/world-50m.json", function(error, world) {
+    d3.json("static/data/world-50m.json", function(error, world) {
     if (error) throw error;
 
     g.insert("path", ".graticule")

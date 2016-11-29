@@ -13,6 +13,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import com.mtriff.services.DatabaseAccessObject;
+import com.mtriff.services.FreemakerConfig;
 
 import freemarker.core.ParseException;
 import freemarker.template.MalformedTemplateNameException;
