@@ -14,30 +14,38 @@ import org.mongodb.morphia.Morphia;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import com.mongodb.DB;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mtriff.models.DBUser;
+import com.mtriff.models.LatestDate;
 import com.mtriff.models.LocationData;
 import com.mtriff.models.LocationType;
 import com.mtriff.models.MagnitudeAggregateData;
 import com.mtriff.models.MagnitudeLocation;
+import org.bson.Document;
+import org.jongo.MongoCursor;
 
 public class DatabaseAccessObject {
 
     private static DatabaseAccessObject dao;
 
+    private MongoClient mongo;
     private Datastore datastore;
     private MongoCollection monthly;
     private MongoCollection location;
+    private MongoCollection forImport;
     
     private Jongo jongo;
-	private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
     
     private HashMap<String, LocationData> locationDataMap;
     private LocationType currentLocationType = null;
     
+    
     public DatabaseAccessObject() {
-            MongoClient mongo = new MongoClient();
+            mongo = new MongoClient();
             Morphia morphia = new Morphia();
             morphia.mapPackage("com.mtriff.models");
             datastore = morphia.createDatastore(mongo, "earthquakeviz");
@@ -46,6 +54,7 @@ public class DatabaseAccessObject {
 			DB mb = mongo.getDB("earthquakeviz");
             jongo = new Jongo(mb);
             monthly = jongo.getCollection("monthly");
+            forImport = jongo.getCollection("forImport");
             
             // Initalize the location map with the default continent fileter
             // type. This will avoid sluggish initial page load
@@ -279,6 +288,63 @@ public class DatabaseAccessObject {
         return locationDataMap;
     }
     
+    public void dropImportTable()
+    {
+        Logger.getAnonymousLogger().info("Dropping import table.");
+        
+        forImport.drop();
+    }
+    
+    public long getMostRecentEntryDate()
+    {
+        Logger.getAnonymousLogger().info("Getting most recent date");
+        long value = 0;
+        Iterator<LatestDate> timeCompare = null;
+        try{
+            timeCompare = monthly.aggregate("{$project:{\"theTime\": \"$properties.time\"}}")
+                    .and("{$sort: {\"theTime\":-1}}")
+                    .and("{$limit:1}")
+                    .as(LatestDate.class);
+        }
+        catch(Exception e)
+        {
+            Logger.getAnonymousLogger().info(e.getMessage());
+        }
+        
+        if(timeCompare != null && timeCompare.hasNext())
+        {
+            value = Long.parseLong(timeCompare.next().getTheTime());            
+        }
+        return value;
+    }
+    
+    public void mergeLatestEarthquakeData(long latestDate) {
+        Logger.getAnonymousLogger().info("Performing mongo insert.");
+    
+        Iterator<Document> a = forImport
+            .aggregate("{$unwind: \"$features\"}")
+            .and("{$project: {_id: 0, \"type\": \"$features.type\", "
+                    + "\"properties\": \"$features.properties\", "
+                    + "\"geometry\": \"$features.geometry\"}}")
+            .and("{$match: {\"properties.time\":{$gt: " + latestDate + "}}}")
+            .as(Document.class);
+
+        Logger.getAnonymousLogger().info("Aggregation complete");
+        if(a.hasNext())
+        {
+            List<Document> docList = Lists.newArrayList(a);
+
+            mongo.getDatabase("earthquakeviz").getCollection("monthly")
+                    .insertMany(docList);
+       
+            Logger.getAnonymousLogger().info("Insert complete");
+        }
+        else
+        {
+            Logger.getAnonymousLogger().info("Nothing to merge");
+        }
+    }
+        
     public String getLocationDataMapAsJSON() {
         try {
         	Logger.getAnonymousLogger().info("Location data map is size: " + locationDataMap.values().size());

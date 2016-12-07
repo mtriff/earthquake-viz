@@ -12,6 +12,8 @@ import com.mtriff.resources.TsunamiCountResource;
 import com.mtriff.resources.TsunamiLocationResource;
 import com.mtriff.resources.UserResource;
 import com.mtriff.services.DatabaseAccessObject;
+import com.mtriff.services.DatabaseUpdateScheduler;
+import com.mtriff.services.DatabaseUpdaterTask;
 
 public class EarthquakeVizApplication extends ResourceConfig {
 	
@@ -31,6 +33,7 @@ public class EarthquakeVizApplication extends ResourceConfig {
 		register(ChartDataResource.class);
 		register(UserResource.class);
 		register(AuthenticationFilter.class);
+                register(DatabaseUpdateScheduler.class);
 		DatabaseAccessObject.getDAO();
 	}
 	
