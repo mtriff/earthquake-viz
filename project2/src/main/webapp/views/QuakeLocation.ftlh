@@ -60,5 +60,5 @@
 
 <hr>
 
-<script src="static/js/topojson.min.js"></script>
-<script src="static/js/quakelocation.js"></script>
+<script src="/earthquake-viz/static/js/topojson.min.js"></script>
+<script src="/earthquake-viz/static/js/quakelocation.js"></script>
