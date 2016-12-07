@@ -6,15 +6,15 @@
     <title>${Title} - EarthquakeViz</title>
 
     <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="static/css/site.css" />
+    <link rel="stylesheet" href="/earthquake-viz/static/css/site.css" />
 
     <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.3.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.6/bootstrap.min.js"></script>
-    <script src="static/js/bootstrap-notify.js"></script>
-    <script src="static/js/useraccounts.js"></script>
-    <script src="static/js/d3.min.js"></script>
-    <script src="static/js/lodash.js"></script>
-    <script src="static/js/quakecommon.js"></script>
+    <script src="/earthquake-viz/static/js/bootstrap-notify.js"></script>
+    <script src="/earthquake-viz/static/js/useraccounts.js"></script>
+    <script src="/earthquake-viz/static/js/d3.min.js"></script>
+    <script src="/earthquake-viz/static/js/lodash.js"></script>
+    <script src="/earthquake-viz/static/js/quakecommon.js"></script>
 </head>
 <body onload="loadUserSettings()">
     <div class="navbar navbar-fixed-top">
@@ -30,11 +30,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="Index" class="navbar-quake-custom">Home</a></li>
-                    <li><a href="Magnitude" class="navbar-quake-custom">Earthquake Magnitudes</a></li>
-                    <li><a href="QuakeLocation" class="navbar-quake-custom">Earthquake Locations</a></li>
-                    <li><a href="TsunamiCount" class="navbar-quake-custom">Tsunami Occurrences</a></li>
-                    <li><a href="TsunamiLocation" class="navbar-quake-custom">Tsunami Locations</a></li>
+                    <li><a href="/earthquake-viz/Index" class="navbar-quake-custom">Home</a></li>
+                    <li><a href="/earthquake-viz/Magnitude" class="navbar-quake-custom">Earthquake Magnitudes</a></li>
+                    <li><a href="/earthquake-viz/QuakeLocation" class="navbar-quake-custom">Earthquake Locations</a></li>
+                    <li><a href="/earthquake-viz/TsunamiCount" class="navbar-quake-custom">Tsunami Occurrences</a></li>
+                    <li><a href="/earthquake-viz/TsunamiLocation" class="navbar-quake-custom">Tsunami Locations</a></li>
 <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b id="user-account-dropdown">Login</b> <span class="caret"></span></a>
 			<ul id="login-dp" class="dropdown-menu dropdown-menu-right">

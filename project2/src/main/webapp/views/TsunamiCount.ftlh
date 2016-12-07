@@ -69,5 +69,5 @@
 
 <hr>
 
-<script src="static/js/tsunamicount.js"></script>
+<script src="/earthquake-viz/static/js/tsunamicount.js"></script>
 

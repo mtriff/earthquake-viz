@@ -38,7 +38,7 @@ function registerUser() {
 	$.ajax({
 		type: "POST",
 		contentType: "application/json",
-		url: "users/create",
+		url: "/earthquake-viz/users/create",
 		dataType: "json",
 		data: JSON.stringify(newUser),
 		success: function(result) {
@@ -77,7 +77,7 @@ function loginUser() {
 		type: "POST",
 		contentType: "application/json",
 		dataType: "json",
-		url: "users/login",
+		url: "/earthquake-viz/users/login",
 		headers: {
 			  "Authorization": auth
 		},
@@ -112,7 +112,7 @@ function saveUser() {
 	$.ajax({
 		type: "PUT",
 		contentType: "application/json",
-		url: "users/update",
+		url: "/earthquake-viz/users/update",
 		dataType: "json",
 		data: sessionStorage.getItem("user"),
 		headers: {
@@ -147,6 +147,7 @@ function logoutUser() {
 		// settings
 		type: 'success'
 	});
+	location.reload();
 }
 
 function displayUsername() {
@@ -297,7 +298,7 @@ function loadRangeEnd() {
 
 function loadQuakeMagnitudeData(blockLoadUserSettings) {
 	if (!blockLoadUserSettings) loadUserSettings();
-	var getURL = "chart-data/quake/magnitude";
+	var getURL = "/earthquake-viz/chart-data/quake/magnitude";
 	var continentDropdown = document.getElementById("continentDropdown").innerHTML;
 	var continentFilter = continentDropdown.replace("<span class=\"caret\"></span>", "").trim();
 	if (continentFilter != "No Filter") getURL += "/continent/" + continentFilter;
@@ -343,7 +344,7 @@ function loadQuakeLocationData() {
 		type: "GET",
 		contentType: "application/json",
 		dataType: "json",
-		url: "chart-data/quake/location",
+		url: "/earthquake-viz/chart-data/quake/location",
 		success: function(result) {
 			rawData = result;
 			var settings = getCurrentChartSettings();
@@ -379,7 +380,7 @@ function loadTsunamiLocationData() {
 		type: "GET",
 		contentType: "application/json",
 		dataType: "json",
-		url: "chart-data/tsunami/location",
+		url: "/earthquake-viz/chart-data/tsunami/location",
 		success: function(result) {
 			rawData = result;
 			var settings = getCurrentChartSettings();
@@ -411,7 +412,7 @@ function loadTsunamiLocationData() {
 
 function loadTsunamiMagnitudeData(blockLoadUserSettings) {
 	if (!blockLoadUserSettings) loadUserSettings();
-	var getURL = "chart-data/tsunami/magnitude";
+	var getURL = "/earthquake-viz/chart-data/tsunami/magnitude";
 	var continentDropdown = document.getElementById("continentDropdown").innerHTML;
 	var continentFilter = continentDropdown.replace("<span class=\"caret\"></span>", "").trim();
 	if (continentFilter != "No Filter") getURL += "/continent/" + continentFilter;

@@ -68,4 +68,4 @@
 
 <hr>
 
-<script src="static/js/quakemagnitude.js"></script>
+<script src="/earthquake-viz/static/js/quakemagnitude.js"></script>
